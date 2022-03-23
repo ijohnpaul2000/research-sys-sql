@@ -1,0 +1,18 @@
+.container {
+  height: calc(100vh - 130px);
+  overflow: hidden;
+}
+
+.title {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: var(--h1);
+  color: var(--textColor);
+}
+
+.description {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: var(--p);
+  color: var(--textColor);
+}

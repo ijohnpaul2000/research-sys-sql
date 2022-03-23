@@ -1,0 +1,110 @@
+.landing_container {
+  height: calc(100vh - 80px);
+  overflow-x: hidden;
+}
+.login {
+  font-family: var(--font-family);
+  font-weight: bold;
+  font-size: var(--h1);
+  color: var(--textColor);
+}
+.sub_title {
+  font-family: var(--font-family);
+  font-size: var(--p);
+  color: var(--textColor);
+}
+.label {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  color: var(--accent-color2);
+}
+.input {
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  color: var(--accent-color2);
+  background-color: var(--inputBoxes) !important;
+}
+.form-header {
+  font-family: var(--font-family);
+  font-size: 1.2rem !important;
+  color: var(--textColor);
+  margin-bottom: 2rem;
+}
+
+.reset-btn {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+.login_guest {
+  font-family: var(--font-family);
+  font-size: 1rem;
+  background-color: var(--button);
+  color: white;
+  text-decoration: none;
+  width: 10rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  text-align: center;
+  &:hover {
+    color: white;
+  }
+}
+.landing-btns {
+  width: 10rem;
+  font-family: var(--font-family) !important;
+  font-size: 1rem !important;
+  border-radius: 10px !important;
+  background-color: var(--button) !important;
+  &:hover {
+    color: white;
+  }
+}
+.guest {
+  width: 10rem;
+  background-color: var(--button-bg);
+}
+.line-container {
+  width: 100%;
+  height: 20px;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+.or-txt {
+  font-size: 1.3rem;
+  background-color: #ffffff;
+  padding: 10 10px;
+}
+.right-header {
+  font-family: var(--font-family);
+  font-size: var(--sp);
+  text-align: center;
+  color: var(--textColor);
+}
+.description {
+  font-family: var(--font-family);
+  font-size: var(--p);
+  text-align: center;
+  color: var(--textColor);
+}
+.fpass_btn {
+  border: none;
+  background-color: Transparent;
+  outline: none;
+}
+.fpass_text {
+  text-decoration: none;
+  color: blue;
+}
+.login-logo {
+  height: 100%;
+  width: 100%;
+}

@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+:root {
+  --background: #f9fbff;
+  --inputBoxes: #f0f5ff;
+  --shadowColor: #d8e1f3;
+  --modal: #fafbff;
+  --behindModal: rgba(240, 245, 255, 0.55);
+  --button: #3e6bc1;
+  --plainBlack: #1f2023;
+  --textColor: #454b56;
+  --ibGuideText: #868c95;
+  --font-family: "Montserrat", sans-serif;
+  --h1: 3rem;
+  --h2: 2.25rem;
+  --sp: 1.75rem;
+  --h3: 1.5rem;
+  --h4: 1.25rem;
+  --p: 1.125rem;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.app-container {
+  height: 100vh;
+  background-color: var(--background);
+  font-family: var(--font-family);
+  color: var(--plainBlack);
+  overflow-x: hidden;
+  transition: 0.5s ease-in-out;
+  @media screen and (min-width: 280px) and (max-width: 1080px) {
+    padding: 0;
+  }
+}
+
+// @media only screen and (min-device-width: 280px) and (max-device-width: 1080px) {
+//   .app-container::-webkit-scrollbar {
+//     display: none;
+//   }
+// }
+
+// ::-webkit-scrollbar {
+//   background-color: var(--textColor);
+//   width: 0.2rem;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: var(--textColor);
+// }
