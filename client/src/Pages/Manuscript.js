@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
+import {
+  Col,
+  Row,
+  Container,
+  Button,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import NotAuthenticated from "../Components/NotAuthenticated";
 var dayjs = require("dayjs");
 const Manuscript = () => {
   Axios.defaults.withCredentials = true;
@@ -13,7 +23,12 @@ const Manuscript = () => {
   //*TODO: For getting the date object.
 
   let createdAt = dayjs().format("YYYY-MM-DD hh:mm:ss");
-  let expiredAt = dayjs(createdAt).add(1, "day").format("YYYY-MM-DD hh:mm:ss");
+  let expiredAt = dayjs(createdAt).add(1, "m").format("YYYY-MM-DD hh:mm:ss");
+  let navigate = useNavigate();
+
+  const timeout = () => {
+    navigate("/login");
+  };
 
   const createGuestCredentials = () => {
     Axios.post("http://localhost:3001/createCredentials", {
@@ -26,6 +41,12 @@ const Manuscript = () => {
       console.log(response);
     });
   };
+  const logoutUser = () => {
+    Axios.get("http://localhost:3001/logout").then((response) => {
+      setIsAuthenticated(false);
+    });
+    setTimeout(timeout, 2000);
+  };
 
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
@@ -33,35 +54,37 @@ const Manuscript = () => {
         setIsAuthenticated(true);
         setRole(response.data.user[0].role);
         console.log("current Role is: " + role);
+      } else {
       }
     });
-  }, [role]);
+  }, [role, isAuthenticated]);
 
   return (
     <>
       {isAuthenticated ? (
-        <>
-          <input
-            type="text"
-            placeholder="Username"
-            onChange={(e) => {
-              setGuestUsername(e.currentTarget.value);
-            }}
-          />
-          <input
-            type="texts"
-            placeholder="Password"
-            onChange={(e) => {
-              setGuestPassword(e.currentTarget.value);
-            }}
-          />
-          <button onClick={createGuestCredentials}>
-            {" "}
-            Create Guest Credentials
-          </button>
-        </>
+        <Container fluid="md" className="manuscript_container">
+          <Row>
+            <Col className="manuscript-text mb-4">Manuscript List</Col>
+          </Row>
+          <Row>
+            <Col className="d-flex justify-content-end align-items-center">
+              <DropdownButton id="dropdown-basic-button" title="Settings">
+                <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
+              </DropdownButton>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Button>Export Masterlist</Button>
+              <Button>Import Masterlist</Button>
+              <Button>Export PDFs</Button>
+              <Button>Add Thesis</Button>
+            </Col>
+          </Row>
+          <Row>{role}</Row>
+        </Container>
       ) : (
-        "You aren't authenticated."
+        <NotAuthenticated />
       )}
     </>
   );

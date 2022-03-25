@@ -61,6 +61,15 @@ app.get("/guestLogin", (req, res) => {
     res.send({ loggedIn: false });
   }
 });
+//* * Method for logging out the users.
+
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return console.error(err);
+    }
+  });
+});
 
 //* *Method for creating guest Credentials with expiration and who created.
 app.post("/createCredentials", (req, res) => {

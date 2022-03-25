@@ -36,11 +36,12 @@ const Guest = () => {
         let expirationDate = dayjs(response.data[0].expiredAt).format(
           "YYYY-MM-DD hh:mm:ss"
         );
-        if (today !== expirationDate) {
+        if (dayjs(today).isAfter(dayjs(expirationDate))) {
+          setErrorMessage("This account is expired.");
+          setTimeout(clearErrorMessage, 2000);
+        } else {
           setTimeout(timeout, 2000);
           setSuccessMessage("Success! Redirecting...");
-        } else {
-          setErrorMessage("This account is expired.");
         }
       }
     });
