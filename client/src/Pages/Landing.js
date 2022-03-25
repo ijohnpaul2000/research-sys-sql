@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavigationBar from "../Components/NavigationBar";
 import { Container, Row, Col } from "react-bootstrap";
 import folder_logo from "../assets/folder_logo.png";
 import Footer from "../Components/Footer";
 const Landing = () => {
+  useEffect(() => {
+    var dayjs = require("dayjs");
+
+    var display = dayjs().format("YYYY/MM/DD");
+
+    let expired = dayjs(display).add(1, "day").format("YYYY/MM/DD");
+    console.log("start at: " + display);
+    console.log("expired at: " + expired);
+  }, []);
+
   return (
     <>
       <NavigationBar />

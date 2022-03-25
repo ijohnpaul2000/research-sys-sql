@@ -1,10 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavigationBar from "../Components/NavigationBar";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/login.png";
+import Axios from "axios";
+var dayjs = require("dayjs");
 
 const Guest = () => {
+  let today = dayjs().format("YYYY-MM-DD hh:mm:ss");
+  const [guestUsername, setGuestUsername] = useState("");
+  const [guestPassword, setGuestPassword] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const timeout = () => {
+    navigate("/manuscript");
+  };
+  const clearErrorMessage = () => {
+    setErrorMessage("");
+  };
+
+  let navigate = useNavigate();
+
+  const guestLogin = () => {
+    Axios.post("http://localhost:3001/guestLogin", {
+      guestUsername: guestUsername,
+      guestPassword: guestPassword,
+    }).then((response) => {
+      if (response.data.message) {
+        setErrorMessage(response.data.message);
+        setTimeout(clearErrorMessage, 2000);
+      } else {
+        setCreatedBy(response.data[0].createdBy);
+        let expirationDate = dayjs(response.data[0].expiredAt).format(
+          "YYYY-MM-DD hh:mm:ss"
+        );
+        if (today !== expirationDate) {
+          setTimeout(timeout, 2000);
+          setSuccessMessage("Success! Redirecting...");
+        } else {
+          setErrorMessage("This account is expired.");
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log(guestUsername);
+    console.log(guestPassword);
+  }, [guestUsername, guestPassword]);
+
   return (
     <>
       <NavigationBar />
@@ -27,13 +73,23 @@ const Guest = () => {
               Dean or Chairperson of the CEIT Department, please enter the{" "}
               <strong>credentials</strong> below.
             </p>
-            <Form>
+            {successMessage && (
+              <Alert variant="success">{successMessage}</Alert>
+            )}
+            {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault();
+                guestLogin();
+              }}
+            >
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Text className="form-header">Email Address</Form.Text>
+                <Form.Text className="form-header">Username</Form.Text>
                 <Form.Control
-                  type="email"
-                  placeholder="Email address"
+                  type="Username"
+                  placeholder="Username"
                   className="input mt-2"
+                  onChange={(e) => setGuestUsername(e.currentTarget.value)}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -42,6 +98,7 @@ const Guest = () => {
                   type="password"
                   placeholder="Password"
                   className="input mt-2"
+                  onChange={(e) => setGuestPassword(e.currentTarget.value)}
                 />
               </Form.Group>
               <div className="d-grid gap-2 d-flex justify-content-end">
@@ -64,15 +121,18 @@ const Guest = () => {
               <img src={logo} alt="PLV Logo" className="login-logo" />
             </div>
             <div className="text d-flex flex-column justify-content-center align-items-center">
-              <div className="header mb-4 ">
+              <div className="right-header mb-4 ">
                 Browsing manuscripts made easier!
               </div>
               <div className="description">
-                Forget flipping pages! You can search and download the research
-                abstract of the manuscript you need using this system.
+                Through CEIT Manuscript Information System, everything is made
+                clean, less time-consuming and easy to maintain. Be sure to
+                login to gain special permissions.
               </div>
             </div>
           </Col>
+          {createdBy}
+          {errorMessage}
         </Row>
       </Container>
     </>

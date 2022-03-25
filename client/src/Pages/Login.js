@@ -1,9 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavigationBar from "../Components/NavigationBar";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../assets/login.png";
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Landing = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  Axios.defaults.withCredentials = true;
+  const timeout = () => {
+    navigate("/manuscript");
+  };
+  const clearErrorMessage = () => {
+    setErrorMessage("");
+  };
+
+  const login = () => {
+    Axios.post("http://localhost:3001/login", {
+      username: username,
+      password: password,
+    }).then((response) => {
+      console.log("this is the response : " + JSON.stringify(response));
+      if (response.data.message) {
+        setErrorMessage(response.data.message);
+        setTimeout(clearErrorMessage, 2000);
+      } else {
+        setTimeout(timeout, 2000);
+        setSuccessMessage("Success! Redirecting...");
+        setRole(response.data[0].role);
+      }
+    });
+  };
+
+  // useEffect(() => {
+  //   Axios.get("http://localhost:3001/login").then((response) => {
+  //     if (response.data.loggedIn === true) {
+  //       setLoginStatus(response.data.user[0].username);
+  //     }
+  //   });
+  // }, []);
+
   return (
     <>
       <NavigationBar />
@@ -22,14 +64,25 @@ const Landing = () => {
               <p className="sub_title">
                 Hello there! Log in to continue and get started
               </p>
-              <Form>
+              {successMessage && (
+                <Alert variant="success">{successMessage}</Alert>
+              )}
+              {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  login();
+                }}
+              >
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Text className="form-header">Email Address</Form.Text>
+                  <Form.Text className="form-header">Username</Form.Text>
                   <Form.Control
-                    type="email"
-                    placeholder="Email address"
+                    placeholder="Username"
                     className="input mt-2"
                     autoComplete="on"
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -39,6 +92,9 @@ const Landing = () => {
                     placeholder="Password"
                     className="input mt-2"
                     autoComplete="on"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                   />
                 </Form.Group>
                 <div className="d-grid gap-2 d-flex justify-content-end">
@@ -59,10 +115,6 @@ const Landing = () => {
                   Login as Guest
                 </Link>
               </div>
-            </div>
-            <div className="p-4 box mt-3 text-center">
-              Forgot Password?{" "}
-              <button className="reset-btn">Reset your password.</button>
             </div>
           </Col>
           <Col
