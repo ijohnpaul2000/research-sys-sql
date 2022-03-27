@@ -89,9 +89,9 @@ app.post("/createCredentials", (req, res) => {
       [guestUsername, hash, createdAt, expiredAt, createdBy],
       (err, result) => {
         if (result) {
-          console.log(result);
+          res.send(result);
         } else {
-          console.log(err);
+          res.send({ message: "This data is existing and may be expired." });
         }
       }
     );
@@ -115,7 +115,6 @@ app.post("/login", (req, res) => {
         bcrypt.compare(password, result[0].password, (error, response) => {
           if (response) {
             req.session.user = result;
-            console.log(req.session.user);
             res.send(result);
           } else {
             res.send({ message: "Wrong credentials." });
@@ -145,7 +144,6 @@ app.post("/guestLogin", (req, res) => {
         bcrypt.compare(guestPassword, result[0].password, (error, response) => {
           if (response) {
             req.session.user = result;
-            console.log(req.session.user);
             res.send(result);
           } else {
             res.send({ message: "Wrong credentials." });
@@ -158,6 +156,62 @@ app.post("/guestLogin", (req, res) => {
   );
 });
 
+//** Method for deleting expired Audits.
+app.post("/viewAudits", (req, res) => {
+  const accessedBy = req.query.accessedBy;
+  const timeIn = req.query.timeIn;
+  const timeOut = req.query.timeOut;
+  const deletedAt = req.query.deletedAt;
+
+  db.query("SELECT * FROM tbl_audits ", (err, result) => {
+    if (err) {
+      res.send({ err: err });
+      console.log(err);
+    }
+    if (result.length > 0) {
+      res.send(result);
+      console.log(result);
+    }
+  });
+});
+
+//** Method for inserting Audits */
+
+app.post("/addAudit", (req, res) => {
+  const accessedBy = req.body.accessedBy;
+  const timeIn = req.body.timeIn;
+  const timeOut = req.body.timeOut;
+  const deletedAt = req.body.deletedAt;
+  const permittedBy = req.body.permittedBy;
+  db.query(
+    "INSERT INTO tbl_audits (accessedBy, timeIn, timeOut, deletedAt, permittedBy) VALUES (?,?,?,?,?)",
+    [accessedBy, timeIn, timeOut, deletedAt, permittedBy],
+    (err, result) => {
+      if (result) {
+        res.send(result);
+        console.log(result);
+      } else {
+        res.send({ message: "Operation Failed." });
+      }
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+});
+
+app.post("/deleteAudits", (req, res) => {
+  const deletedAt = req.body.deletedAt;
+  db.query("DELETE FROM tbl_audits where deletedAt < NOW()", (err, result) => {
+    if (result) {
+      console.log(result);
+      console.log(deletedAt);
+    } else {
+      console.log(err);
+      console.log(deletedAt);
+    }
+  });
+});
 app.listen(3001, () => {
   console.log("running server");
 });

@@ -10,50 +10,53 @@ import {
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import NotAuthenticated from "../Components/NotAuthenticated";
+import CreateGuest from "../Modals/CreateGuest";
+import Audit from "../AuditTrails/Audit";
 var dayjs = require("dayjs");
 const Manuscript = () => {
   Axios.defaults.withCredentials = true;
   const [role, setRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // *TODO: guestCredentials button for chairperson and dean
-
-  const [guestUsername, setGuestUsername] = useState("");
-  const [guestPassword, setGuestPassword] = useState("");
-  //*TODO: For getting the date object.
-
-  let createdAt = dayjs().format("YYYY-MM-DD hh:mm:ss");
-  let expiredAt = dayjs(createdAt).add(1, "m").format("YYYY-MM-DD hh:mm:ss");
+  const [showModal, setShowModal] = useState(false);
+  const [showAudits, setShowAudits] = useState(false);
+  const [permittedBy, setPermittedBy] = useState("");
   let navigate = useNavigate();
+
+  const [auditTimeIn, setAuditTimeIn] = useState("");
+
+  //*TODO: For getting the date object.
 
   const timeout = () => {
     navigate("/login");
   };
 
-  const createGuestCredentials = () => {
-    Axios.post("http://localhost:3001/createCredentials", {
-      guestUsername: guestUsername,
-      guestPassword: guestPassword,
-      createdAt: createdAt,
-      expiredAt: expiredAt,
-      createdBy: role,
-    }).then((response) => {
-      console.log(response);
-    });
-  };
   const logoutUser = () => {
+    Axios.post("http://localhost:3001/addAudit", {
+      accessedBy: role,
+      timeIn: auditTimeIn,
+      timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+      deletedAt: dayjs(auditTimeIn).add(1, "w").format("YYYY-MM-DD HH:mm:ss"),
+      permittedBy: permittedBy,
+    }).then((response) => {
+      console.log(
+        JSON.stringify("ADD AUDIT RESPONSE: " + JSON.stringify(response))
+      );
+    });
+
     Axios.get("http://localhost:3001/logout").then((response) => {
       setIsAuthenticated(false);
     });
-    setTimeout(timeout, 2000);
+    setTimeout(timeout, 1000);
   };
 
   useEffect(() => {
+    setAuditTimeIn(dayjs().format("YYYY-MM-DD hh:mm:ss"));
+
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
         setIsAuthenticated(true);
         setRole(response.data.user[0].role);
-        console.log("current Role is: " + role);
+        setPermittedBy(response.data.user[0].createdBy);
       } else {
       }
     });
@@ -70,6 +73,22 @@ const Manuscript = () => {
             <Col className="d-flex justify-content-end align-items-center">
               <DropdownButton id="dropdown-basic-button" title="Settings">
                 <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Create Guest Credentials
+                  {showModal ? <CreateGuest createRole={role} /> : ""}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    setShowAudits(true);
+                  }}
+                >
+                  System History
+                  {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
+                </Dropdown.Item>
               </DropdownButton>
             </Col>
           </Row>
@@ -82,6 +101,7 @@ const Manuscript = () => {
             </Col>
           </Row>
           <Row>{role}</Row>
+          <Row>This guest is permitted by : {permittedBy}</Row>
         </Container>
       ) : (
         <NotAuthenticated />
