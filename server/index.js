@@ -37,15 +37,16 @@ app.use(
 );
 
 //**  Instance of the database object.
+//CHECK PASSWORD BOSS NAKS HSHSHS
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "password",
+  password: "",
   database: "manuscript_db",
 });
 
 //* * Method for getting the DEAN, CHAIRPERSON, ENCODER Sessions
-app.get("/login", (req, res) => {
+app.get("/login", (req, res) => { 
   if (req.session.user) {
     res.send({ loggedIn: true, user: req.session.user });
   } else {
@@ -61,8 +62,8 @@ app.get("/guestLogin", (req, res) => {
     res.send({ loggedIn: false });
   }
 });
-//* * Method for logging out the users.
 
+//* * Method for logging out the users.
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -98,7 +99,7 @@ app.post("/createCredentials", (req, res) => {
   });
 });
 
-//** Method for Loggin all actions but guest.
+//** Method for Login all actions but guest.
 app.post("/login", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -212,6 +213,68 @@ app.post("/deleteAudits", (req, res) => {
     }
   });
 });
+
+// THESIS CONTENT MANAGEMENT SYSTEM
+
+//Retrieving Manuscripts
+app.get("/manuscripts", (req, res) => {
+
+  let sql = "SELECT * FROM tbl_thesis";
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+//Creating
+app.post("/create", (req, res) => {
+  const title = req.body.title;
+  const course = req.body.course;
+  const section = req.body.section;
+  const yearPublished = req.body.yearPublished;
+  const authors = req.body.authors;
+  const panelists = req.body.panelists;
+  const copies = req.body.copies;
+  const volume = req.body.volume;
+  const grades = req.body.grades;
+  const keywords = req.body.keywords;
+  const adviser = req.body.adviser;
+  const chairperson = req.body.chairperson;
+  const dean = req.body.dean;
+  const abstract = req.body.abstract;
+
+  var sql = "INSERT INTO tbl_thesis (title, course, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+  db.query(sql, [title, course, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("New Value Inserted");
+      }
+    })
+});
+
+//Retrieving Sections
+app.get("/sections", (req, res) => {
+
+  let sql = "SELECT * FROM tbl_section";
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+
+
 app.listen(3001, () => {
   console.log("running server");
 });

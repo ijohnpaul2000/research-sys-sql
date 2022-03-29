@@ -6,26 +6,89 @@ import {
   Button,
   Dropdown,
   DropdownButton,
+  ButtonGroup
 } from "react-bootstrap";
+import {
+  BsFillPencilFill,
+  BsFillTrashFill,
+  BsFillEyeFill,
+  BsTrash,
+} from "react-icons/bs";
+import { IconContext } from "react-icons";
+import "../sass/pages/_manuscript.scss"
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import NotAuthenticated from "../Components/NotAuthenticated";
 import CreateGuest from "../Modals/CreateGuest";
+import CreateThesis from "../Modals/CreateThesis"
 import Audit from "../AuditTrails/Audit";
+import { Chip, Stack, Avatar } from '@mui/material';
+import { DataGrid } from "@mui/x-data-grid";
+
 var dayjs = require("dayjs");
+
 const Manuscript = () => {
+
+  //Modal States
+  const [showModal, setShowModal] = useState(false);
+  const [showAudits, setShowAudits] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false)
+
+  //User States
   Axios.defaults.withCredentials = true;
   const [role, setRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showAudits, setShowAudits] = useState(false);
   const [permittedBy, setPermittedBy] = useState("");
   let navigate = useNavigate();
-
   const [auditTimeIn, setAuditTimeIn] = useState("");
 
-  //*TODO: For getting the date object.
+  //Thesis States
+  const [thesisData, setThesisData] = useState([]);
 
+  const columns = [
+    { field: "title", headerName: "Title", width: 200, flex: 2 },
+    { field: "authors", headerName: "Authors", width: 200, flex: 2 },
+    { field: "adviser", headerName: "Adviser", width: 200, flex: 2 },
+    { field: "course", headerName: "Course", width: 200, flex: 2 },
+    { field: "section", headerName: "Section", width: 20, flex: 1 },
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 20,
+      flex: 1,
+      headerAlign: "center",
+      renderCell: (cellValues) => {
+        return (
+          <ButtonGroup className="center-btn">
+            <Button
+              variant="primary"
+              onClick={(event) => {
+                console.log(cellValues);
+                console.log("selected thesis : " + cellValues.row.thesis_id);
+              }}
+            >
+              <IconContext.Provider value={{ color: "#fff" }}>
+                <div>
+                  <BsFillEyeFill />
+                </div>
+              </IconContext.Provider>
+            </Button>
+            <Button variant="danger" onClick={() => {
+              // openDeleteModal(cellValues.row.id, cellValues.row.title);
+            }}>
+              <IconContext.Provider value={{ color: "#fff" }}>
+                <div>
+                  <BsTrash />
+                </div>
+              </IconContext.Provider>
+            </Button>
+          </ButtonGroup>
+        );
+      },
+    }
+  ];
+
+  //*TODO: For getting the date object.
   const timeout = () => {
     navigate("/login");
   };
@@ -62,47 +125,91 @@ const Manuscript = () => {
     });
   }, [role, isAuthenticated]);
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/manuscripts").then((response) => {
+      // console.log(response); 
+      setThesisData(response.data);
+    });
+  }, [thesisData]);
+  
+
   return (
     <>
       {isAuthenticated ? (
-        <Container fluid="md" className="manuscript_container">
-          <Row>
-            <Col className="manuscript-text mb-4">Manuscript List</Col>
-          </Row>
-          <Row>
-            <Col className="d-flex justify-content-end align-items-center">
-              <DropdownButton id="dropdown-basic-button" title="Settings">
-                <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
-                <Dropdown.Item
+        <>
+          <Stack direction="row" spacing={1} className="m-2">
+            <Chip
+              avatar={
+                <Avatar
+                  alt={role}
+                  src={
+                    "https://avatars.dicebear.com/api/jdenticon/" +
+                    Math.random() +
+                    ".svg"
+                  }
+                />
+              }
+              label={"Currenly Signed in as " + role}
+            />
+            <Chip className={role === "Guest" ? "visibleEl" : "hiddenEl"} label={"Permitted by: " + permittedBy} variant="outlined" />
+          </Stack>
+          <Container fluid="md" className="manuscript_container">
+            <Row>
+              <Col className="manuscript-text mb-4">Manuscript List</Col>
+            </Row>
+            <Row>
+              <Col className="d-flex justify-content-end align-items-center">
+                <DropdownButton id="dropdown-basic-button" title="Settings">
+                  <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    Create Guest Credentials
+                    {showModal ? <CreateGuest createRole={role} /> : ""}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setShowAudits(true);
+                    }}
+                  >
+                    System History
+                    {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
+                  </Dropdown.Item>
+                </DropdownButton>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Button>Export Masterlist</Button>
+                <Button>Import Masterlist</Button>
+                <Button>Export PDFs</Button>
+                <Button
                   onClick={() => {
-                    setShowModal(true);
+                    setShowAddModal(true);
+                    console.log("Add Modal Open");
                   }}
                 >
-                  Create Guest Credentials
-                  {showModal ? <CreateGuest createRole={role} /> : ""}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    setShowAudits(true);
-                  }}
-                >
-                  System History
-                  {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
-                </Dropdown.Item>
-              </DropdownButton>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Button>Export Masterlist</Button>
-              <Button>Import Masterlist</Button>
-              <Button>Export PDFs</Button>
-              <Button>Add Thesis</Button>
-            </Col>
-          </Row>
-          <Row>{role}</Row>
-          <Row>This guest is permitted by : {permittedBy}</Row>
+                  Add Thesis
+                  {showAddModal && <CreateThesis />}
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+          <Container fluid>
+            <div style={{ height: "70vh", width: "100%" }}>
+              <DataGrid
+                rows={thesisData}
+                columns={columns}
+                getRowId={(row) => row.thesis_id}
+                pageSize={10}
+                rowsPerPageOptions={[10]}
+              />
+            </div>
+          {" "}
         </Container>
+        </>
       ) : (
         <NotAuthenticated />
       )}
