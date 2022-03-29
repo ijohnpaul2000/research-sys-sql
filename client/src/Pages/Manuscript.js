@@ -23,7 +23,7 @@ import CreateGuest from "../Modals/CreateGuest";
 import CreateThesis from "../Modals/CreateThesis"
 import Audit from "../AuditTrails/Audit";
 import { Chip, Stack, Avatar } from '@mui/material';
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 var dayjs = require("dayjs");
 
@@ -46,10 +46,13 @@ const Manuscript = () => {
   const [thesisData, setThesisData] = useState([]);
 
   const columns = [
+    { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
     { field: "title", headerName: "Title", width: 200, flex: 2 },
     { field: "authors", headerName: "Authors", width: 200, flex: 2 },
+    { field: "panelists", headerName: "Panels", width: 200, flex: 2 },
     { field: "adviser", headerName: "Adviser", width: 200, flex: 2 },
     { field: "course", headerName: "Course", width: 200, flex: 2 },
+    { field: "yearPublished", headerName: "Year", width: 20, flex: 1 },
     { field: "section", headerName: "Section", width: 20, flex: 1 },
     {
       field: "action",
@@ -130,7 +133,7 @@ const Manuscript = () => {
       // console.log(response); 
       setThesisData(response.data);
     });
-  }, [thesisData]);
+  }, []);
   
 
   return (
@@ -151,7 +154,11 @@ const Manuscript = () => {
               }
               label={"Currenly Signed in as " + role}
             />
-            <Chip className={role === "Guest" ? "visibleEl" : "hiddenEl"} label={"Permitted by: " + permittedBy} variant="outlined" />
+            <Chip
+              className={role === "Guest" ? "visibleEl" : "hiddenEl"}
+              label={"Permitted by: " + permittedBy}
+              variant="outlined"
+            />
           </Stack>
           <Container fluid="md" className="manuscript_container">
             <Row>
@@ -205,10 +212,45 @@ const Manuscript = () => {
                 getRowId={(row) => row.thesis_id}
                 pageSize={10}
                 rowsPerPageOptions={[10]}
+                components={{ Toolbar: GridToolbar }}
+                componentsProps={{
+                  toolbar: {
+                    csvOptions: {
+                      fields: [
+                        "title",
+                        "authors",
+                        "adviser",
+                        "course",
+                        "section",
+                        "yearPublished",
+                        "panelists",
+                      ],
+                    },
+                    printOptions: {
+                      hideFooter: true,
+                      hideToolbar: true,
+                      fields: [
+                        "title",                   
+                        "authors",
+                        "adviser",
+                        "course",
+                        "section",
+                      ]
+                    }
+                  },
+                }}
+                initialState={{
+                  columns: {
+                    columnVisibilityModel: {
+                      thesis_id: false,
+                      yearPublished: false,
+                      panelists: false,
+                    },
+                  },
+                }}
               />
-            </div>
-          {" "}
-        </Container>
+            </div>{" "}
+          </Container>
         </>
       ) : (
         <NotAuthenticated />
