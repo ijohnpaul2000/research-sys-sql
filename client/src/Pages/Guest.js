@@ -4,6 +4,8 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/login.png";
 import Axios from "axios";
+import { FadeInPage }from "../Components/Animation";
+
 var dayjs = require("dayjs");
 
 const Guest = () => {
@@ -55,6 +57,7 @@ const Guest = () => {
   return (
     <>
       <NavigationBar />
+      
       <Container fluid="sm" className="guest_container">
         <Row>
           <Col
@@ -62,6 +65,7 @@ const Guest = () => {
             md={6}
             className="landing_container d-flex justify-content-center flex-column"
           >
+            <FadeInPage>
             <h2 className="login">Guest Login</h2>
             <p className="sub_title text-start">
               Before you can have an official guest access to CEIT Manuscript
@@ -78,6 +82,7 @@ const Guest = () => {
               <Alert variant="success">{successMessage}</Alert>
             )}
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+            
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -112,7 +117,9 @@ const Guest = () => {
                 </Button>
               </div>{" "}
             </Form>
+            </FadeInPage>
           </Col>
+          
           <Col
             sm={12}
             md={6}
@@ -136,6 +143,7 @@ const Guest = () => {
           {errorMessage}
         </Row>
       </Container>
+      
     </>
   );
 };

@@ -3,10 +3,14 @@ import NavigationBar from "../Components/NavigationBar";
 import { Container, Row, Col } from "react-bootstrap";
 import folder_logo from "../assets/folder_logo.png";
 import Footer from "../Components/Footer";
+import { SlideAnimationPage }from "../Components/Animation";
+
+
 const Landing = () => {
   return (
     <>
       <NavigationBar />
+      <SlideAnimationPage>
       <Container
         fluid="md"
         className="container d-flex justify-content-center align-items-center"
@@ -42,6 +46,7 @@ const Landing = () => {
           </Col>
         </Row>
       </Container>
+      </SlideAnimationPage>
       <Footer />
     </>
   );
