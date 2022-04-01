@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -230,10 +230,11 @@ app.get("/manuscripts", (req, res) => {
   });
 });
 
-//Creating
+//Creating Thesis Content
 app.post("/create", (req, res) => {
   const title = req.body.title;
   const course = req.body.course;
+  const yearLevel = req.body.yearLevel;
   const section = req.body.section;
   const yearPublished = req.body.yearPublished;
   const authors = req.body.authors;
@@ -247,9 +248,9 @@ app.post("/create", (req, res) => {
   const dean = req.body.dean;
   const abstract = req.body.abstract;
 
-  var sql = "INSERT INTO tbl_thesis (title, course, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var sql = "INSERT INTO tbl_thesis (title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-  db.query(sql, [title, course, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract],
+  db.query(sql, [title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -259,6 +260,54 @@ app.post("/create", (req, res) => {
     })
 });
 
+//Updating Thesis Content
+app.put("/update", (req, res) => {
+  const id = req.body.id;
+  const title = req.body.title;
+  const course = req.body.course;
+  const yearLevel = req.body.yearLevel;
+  const section = req.body.section;
+  const yearPublished = req.body.yearPublished;
+  const authors = req.body.authors;
+  const panelists = req.body.panelists;
+  const copies = req.body.copies;
+  const volume = req.body.volume;
+  const grades = req.body.grades;
+  const keywords = req.body.keywords;
+  const adviser = req.body.adviser;
+  const chairperson = req.body.chairperson;
+  const dean = req.body.dean;
+  const abstract = req.body.abstract;
+
+  var sql = "UPDATE tbl_thesis SET title = ? , course = ?, yearLevel = ?, section = ?, yearPublished = ?, authors = ? , panelists = ?, copies = ?, volume = ?, grades = ?, keywords = ? , adviser = ?, chairperson = ?, dean = ?, abstract = ? WHERE thesis_id = ?";
+
+  db.query(sql, [title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("New Value Updated");
+      }
+    })
+});
+
+//Deleting Thesis Content
+app.delete("/deleteThesis/:id", (req, res) => {
+  const id = req.params.id;
+
+  var sql = "DELETE FROM tbl_thesis WHERE thesis_id = ?" 
+
+  db.query(sql, id,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send("Value Deleted");
+      }
+    })
+});
+
+// SECTION
 //Retrieving Sections
 app.get("/sections", (req, res) => {
 
@@ -273,6 +322,20 @@ app.get("/sections", (req, res) => {
   });
 });
 
+//Year Level
+//Retrieving Year Level
+app.get("/yearlevel", (req, res) => {
+
+  let sql = "SELECT * FROM tbl_yearlevel";
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 
 app.listen(3001, () => {

@@ -24,15 +24,18 @@ import CreateThesis from "../Modals/CreateThesis"
 import Audit from "../AuditTrails/Audit";
 import { Chip, Stack, Avatar } from '@mui/material';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import UpdateThesis from "../Modals/UpdateThesis";
+import DeleteThesis from "../Modals/DeleteThesis";
 
 var dayjs = require("dayjs");
 
 const Manuscript = () => {
-
   //Modal States
   const [showModal, setShowModal] = useState(false);
   const [showAudits, setShowAudits] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   //User States
   Axios.defaults.withCredentials = true;
@@ -45,6 +48,14 @@ const Manuscript = () => {
   //Thesis States
   const [thesisData, setThesisData] = useState([]);
 
+  // Get Thesis ID
+  const [thesisId, setThesisId] = useState("");
+
+  //Get Single Thesis Record
+  const [singleThesis, setSingleThesis] = useState([]);
+
+  const [title, setTitle] = useState("");
+
   const columns = [
     { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
     { field: "title", headerName: "Title", width: 200, flex: 2 },
@@ -52,7 +63,8 @@ const Manuscript = () => {
     { field: "panelists", headerName: "Panels", width: 200, flex: 2 },
     { field: "adviser", headerName: "Adviser", width: 200, flex: 2 },
     { field: "course", headerName: "Course", width: 200, flex: 2 },
-    { field: "yearPublished", headerName: "Year", width: 20, flex: 1 },
+    { field: "yearPublished", headerName: "Year Pub", width: 20, flex: 1 },
+    { field: "yearLevel", headerName: "Year Lv", width: 20, flex: 1 },
     { field: "section", headerName: "Section", width: 20, flex: 1 },
     {
       field: "action",
@@ -68,6 +80,24 @@ const Manuscript = () => {
               onClick={(event) => {
                 console.log(cellValues);
                 console.log("selected thesis : " + cellValues.row.thesis_id);
+                openViewInfo(
+                  cellValues.row.thesis_id,
+                  cellValues.row.title,
+                  cellValues.row.course,
+                  cellValues.row.yearLevel,
+                  cellValues.row.section,
+                  cellValues.row.authors,
+                  cellValues.row.panelists,
+                  cellValues.row.copies,
+                  cellValues.row.volume,
+                  cellValues.row.grades,
+                  cellValues.row.keywords,
+                  cellValues.row.adviser,
+                  cellValues.row.chairperson,
+                  cellValues.row.dean,
+                  cellValues.row.abstract,
+                  cellValues.row.yearPublished
+                );
               }}
             >
               <IconContext.Provider value={{ color: "#fff" }}>
@@ -76,9 +106,12 @@ const Manuscript = () => {
                 </div>
               </IconContext.Provider>
             </Button>
-            <Button variant="danger" onClick={() => {
-              // openDeleteModal(cellValues.row.id, cellValues.row.title);
-            }}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                openDeleteModal(cellValues.row.thesis_id, cellValues.row.title);
+              }}
+            >
               <IconContext.Provider value={{ color: "#fff" }}>
                 <div>
                   <BsTrash />
@@ -88,7 +121,7 @@ const Manuscript = () => {
           </ButtonGroup>
         );
       },
-    }
+    },
   ];
 
   //*TODO: For getting the date object.
@@ -130,11 +163,59 @@ const Manuscript = () => {
 
   useEffect(() => {
     Axios.get("http://localhost:3001/manuscripts").then((response) => {
-      // console.log(response); 
+      // console.log(response);
       setThesisData(response.data);
     });
   }, []);
+
+    //Open View Info Modal
+    const openViewInfo = (
+      id,
+      title,
+      course,
+      yearLevel,
+      section,
+      authors,
+      panelists,
+      noOfCopies,
+      volumeNo,
+      grades,
+      keywords,
+      adviser,
+      chairperson,
+      dean,
+      abstract,
+      year
+    ) => {
+      setThesisId(id);
   
+      const data = {
+        id,
+        title,
+        course,
+        yearLevel,
+        section,
+        authors,
+        panelists,
+        noOfCopies,
+        volumeNo,
+        grades,
+        keywords,
+        adviser,
+        chairperson,
+        dean,
+        abstract,
+        year
+      };
+      setSingleThesis(data);
+      setShowEditModal(true);
+    };
+
+    const openDeleteModal = (id, title) => {
+      setThesisId(id);
+      setTitle(title);
+      setShowDeleteModal(true)
+    }
 
   return (
     <>
@@ -204,53 +285,59 @@ const Manuscript = () => {
               </Col>
             </Row>
           </Container>
-          <Container fluid>
-            <div style={{ height: "70vh", width: "100%" }}>
-              <DataGrid
-                rows={thesisData}
-                columns={columns}
-                getRowId={(row) => row.thesis_id}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-                components={{ Toolbar: GridToolbar }}
-                componentsProps={{
-                  toolbar: {
-                    csvOptions: {
-                      fields: [
-                        "title",
-                        "authors",
-                        "adviser",
-                        "course",
-                        "section",
-                        "yearPublished",
-                        "panelists",
-                      ],
-                    },
-                    printOptions: {
-                      hideFooter: true,
-                      hideToolbar: true,
-                      fields: [
-                        "title",                   
-                        "authors",
-                        "adviser",
-                        "course",
-                        "section",
-                      ]
-                    }
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={thesisData}
+              columns={columns}
+              getRowId={(row) => row.thesis_id}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+              components={{ Toolbar: GridToolbar }}
+              componentsProps={{
+                toolbar: {
+                  csvOptions: {
+                    fields: [
+                      "title",
+                      "authors",
+                      "adviser",
+                      "course",
+                      "yearLevel",
+                      "section",
+                      "yearPublished",
+                      "panelists",
+                    ],
                   },
-                }}
-                initialState={{
-                  columns: {
-                    columnVisibilityModel: {
-                      thesis_id: false,
-                      yearPublished: false,
-                      panelists: false,
-                    },
+                  printOptions: {
+                    hideFooter: true,
+                    hideToolbar: true,
+                    fields: [
+                      "title",
+                      "authors",
+                      "adviser",
+                      "course",
+                      "yearLevel",
+                      "section",
+                    ],
                   },
-                }}
-              />
-            </div>{" "}
-          </Container>
+                },
+              }}
+              initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    thesis_id: false,
+                    yearPublished: false,
+                    panelists: false,
+                  },
+                },
+              }}
+            />
+          </div>
+          {showEditModal && (
+            <UpdateThesis singleThesis={singleThesis} thesisId={thesisId} />
+          )}
+          {showDeleteModal && (
+            <DeleteThesis thesisTitle={title} thesisId={thesisId} />
+          )}
         </>
       ) : (
         <NotAuthenticated />

@@ -16,7 +16,8 @@ const CreateThesis = () => {
   //Use States for Thesis Content
   const [title, setTitle] = useState("");
   const [course, setCourse] = useState("Information Technology");
-  const [section, setSection] = useState("3-1");
+  const [yearLevel, setYearLevel] = useState("3")
+  const [section, setSection] = useState("1");
   const [yearPublished, setYearPublished] = useState("2022");
   const [authors, setAuthors] = useState("");
   const [panelists, setPanelists] = useState("");
@@ -29,11 +30,11 @@ const CreateThesis = () => {
   const [dean, setDean] = useState("");
   const [abstract, setAbstract] = useState("");
   const [sectionData, setSectionData] = useState([]);
+  const [yearLevelData, setYearLevelData] = useState([]);
 
   let navigate = useNavigate();
   let currentYear = new Date().getFullYear();
   
-
   //List Years (10 years ago)
   let yearList = [];
   for (let yr = currentYear; yr > currentYear - 10; yr--) {
@@ -79,6 +80,7 @@ const CreateThesis = () => {
     const data = {
       title: title,
       course: course,
+      yearLevel: yearLevel,
       section: section,
       yearPublished: yearPublished,
       authors: authors,
@@ -118,14 +120,18 @@ const CreateThesis = () => {
     addThesisData();
     resetForm();
     setValidated(false);
-    //notifySuccess();
   };
 
-  //Retrieving Sections
+  //Retrieving Year Level/Sections
   useEffect(() => {
     Axios.get("http://localhost:3001/sections").then((response) => {
       // console.log(response); 
       setSectionData(response.data);
+    });
+
+    Axios.get("http://localhost:3001/yearlevel").then((response) => {
+      // console.log(response); 
+      setYearLevelData(response.data);
     });
   }, []);
 
@@ -176,44 +182,59 @@ const CreateThesis = () => {
                     Please enter a title.
                   </Form.Control.Feedback>
                 </Form.Group>
+                <Form.Group as={Col} className="mb-3" controlId="formGridStateCours">
+                  <Form.Label>Course</Form.Label>
+                  <Form.Select
+                    onChange={(e) => setCourse(e.target.value)}
+                    value={course}
+                  >
+                    <option>Information Technology</option>
+                    <option>Engineering</option>
+                  </Form.Select>
+                </Form.Group>
                 <Row className="mb-3">
                   <Col>
-                    <Form.Group as={Col} controlId="formGridState">
-                      <Form.Label>Course</Form.Label>
+                    <Form.Group as={Col} controlId="formGridStateYear">
+                      <Form.Label>Year Lv</Form.Label>
                       <Form.Select
-                        onChange={(e) => setCourse(e.target.value)}
-                        value={course}
+                        onChange={(e) => setYearLevel(e.target.value)}
+                        value={yearLevel}
                       >
-                        <option>Information Technology</option>
-                        <option>Engineering</option>
+                        {yearLevelData.map((val) => {
+                          return (
+                            <option key={val.yearLevel_id}>
+                              {val.yearLevel}
+                            </option>
+                          );
+                        })}
                       </Form.Select>
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group as={Col} controlId="formGridState">
+                    <Form.Group as={Col} controlId="formGridStateSec">
                       <Form.Label>Section</Form.Label>
                       <Form.Select
                         onChange={(e) => setSection(e.target.value)}
                         value={section}
                       >
                         {sectionData.map((val) => {
-                          return <option key={val.section_id}>{val.section}</option>;
+                          return (
+                            <option key={val.section_id}>{val.section}</option>
+                          );
                         })}
                       </Form.Select>
                     </Form.Group>
                   </Col>{" "}
                   <Col>
-                    <Form.Group as={Col} controlId="formGridState">
+                    <Form.Group as={Col} controlId="formGridStatePub">
                       <Form.Label>Year Published</Form.Label>
                       <Form.Select
                         onChange={(e) => setYearPublished(e.target.value)}
                         value={yearPublished}
                       >
-                        {
-                          yearList.map((val) => {
-                            return <option key={val}>{val}</option>
-                          })
-                        }
+                        {yearList.map((val) => {
+                          return <option key={val}>{val}</option>;
+                        })}
                       </Form.Select>
                     </Form.Group>
                   </Col>
@@ -238,7 +259,7 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridPanel">
                       <Form.Label>Panelists</Form.Label>
                       <Form.Control
                         as="textarea"
@@ -258,7 +279,7 @@ const CreateThesis = () => {
                 </Row>
                 <Row className="mb-3">
                   <Col>
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridCopy">
                       <Form.Label>No. Of Copies</Form.Label>
                       <Form.Control
                         type="number"
@@ -273,7 +294,7 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridVol">
                       <Form.Label>Volume No.</Form.Label>
                       <Form.Control
                         type="number"
@@ -289,7 +310,7 @@ const CreateThesis = () => {
                   </Col>
                   <Col>
                     {" "}
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridGr">
                       <Form.Label>Grades</Form.Label>
                       <Form.Control
                         type="number"
@@ -306,7 +327,11 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group as={Col} className="mb-3" controlId="formGridAdviser">
+                <Form.Group
+                  as={Col}
+                  className="mb-3"
+                  controlId="formGridKey"
+                >
                   <Form.Label>Keywords</Form.Label>
                   <Form.Control
                     type="text"
@@ -320,7 +345,7 @@ const CreateThesis = () => {
                 </Form.Group>{" "}
                 <Row className="mb-3">
                   <Col>
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridAdv">
                       <Form.Label>Adviser</Form.Label>
                       <Form.Control
                         type="text"
@@ -334,7 +359,7 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Group as={Col} controlId="formGridChair">
                       <Form.Label>Chairperson</Form.Label>
                       <Form.Control
                         type="text"
@@ -350,7 +375,7 @@ const CreateThesis = () => {
                 </Row>{" "}
                 <Row>
                   <Col>
-                    <Form.Group controlId="formGridCity">
+                    <Form.Group controlId="formGridDean">
                       <Form.Label>Dean</Form.Label>
                       <Form.Control
                         type="text"
