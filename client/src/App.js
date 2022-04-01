@@ -1,9 +1,11 @@
 import "./sass/index.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route }from "react-router-dom";
 import Guest from "./Pages/Guest";
 import Login from "./Pages/Login";
 import Manuscript from "./Pages/Manuscript";
 import Landing from "./Pages/Landing";
+
+
 function App() {
   return (
     <div className="app-container">
@@ -15,7 +17,9 @@ function App() {
           <Route path="manuscript" element={<Manuscript />} />
         </Routes>
       </BrowserRouter>
+
     </div>
+
   );
 }
 

@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import logo from "../assets/login.png";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { SlideAnimationPage, FadeInPage }from "../Components/Animation";
+
 const Landing = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -49,6 +51,7 @@ const Landing = () => {
   return (
     <>
       <NavigationBar />
+      
       <Container
         fluid="md"
         className="landing_container d-flex justify-content-center align-items-center"
@@ -59,6 +62,7 @@ const Landing = () => {
             md={6}
             className=" d-flex flex-column justify-content-center"
           >
+            <FadeInPage>
             <div className="p-4 box">
               <p className="login">Login</p>
               <p className="sub_title">
@@ -116,7 +120,9 @@ const Landing = () => {
                 </Link>
               </div>
             </div>
+            </FadeInPage>
           </Col>
+          
           <Col
             sm={12}
             md={6}
@@ -136,8 +142,10 @@ const Landing = () => {
               </div>
             </div>
           </Col>
+          
         </Row>
       </Container>
+      
     </>
   );
 };
