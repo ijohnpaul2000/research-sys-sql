@@ -4,6 +4,7 @@ import Guest from "./Pages/Guest";
 import Login from "./Pages/Login";
 import Manuscript from "./Pages/Manuscript";
 import Landing from "./Pages/Landing";
+import ImportPDF from "./Components/ImportPDF"
 function App() {
   return (
     <div className="app-container">
@@ -13,6 +14,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="guest" element={<Guest />} />
           <Route path="manuscript" element={<Manuscript />} />
+          <Route path="view" element={<ImportPDF />} />
         </Routes>
       </BrowserRouter>
     </div>

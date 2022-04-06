@@ -1,0 +1,50 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  height: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  height: 90px;
+  align-items: center;
+}
+.header img {
+  height: 80px;
+  width: 80px;
+}
+.text-container {
+  margin: 0 2rem;
+}
+.school {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.address {
+  font-size: 1.1rem;
+  font-style: italic;
+}
+.abstract {
+  font-size: 1.1rem;
+  padding: 1rem 0;
+}
+.person {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem 3rem;
+  padding: 1rem 0;
+}
+.information {
+  font-size: 1.1rem;
+  padding: 1rem 0;
+  display: grid;
+  gap: 1rem 3rem;
+  grid-template-columns: 1fr 1fr;
+}

@@ -16,6 +16,7 @@ import ImportPDF from "../Components/ImportPDF"
 import "../sass/modals/_updatethesis.scss";
 
 const UpdateThesis = ({ thesisId, singleThesis }) => {
+  const navigate = useNavigate();
   //Use States for Modal
   const [show, setShow] = useState(true);
   const [validated, setValidated] = useState(false);
@@ -154,9 +155,18 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
 
   //Import PDF
   const importAsPDF = () => {
-    return (
-      <ImportPDF pdfImport={singleThesis}></ImportPDF>
-    )
+    navigate("/view", {
+      state: {
+        title: title,
+        abstract: abstract,
+        authors: authors,
+        adviser: adviser,
+        panelists: panelists,
+        course: course,
+        year: yearPublished,
+        chairperson: chairperson
+      },
+    });
   }
 
   //Submit Function
@@ -482,7 +492,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                 <Button
                   variant="danger"
                   className={!checked ? "visibleEl" : "hiddenEl"}
-                  onChange={importAsPDF}
+                  onClick={importAsPDF}
                 >
                   Import as PDF
                 </Button>

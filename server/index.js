@@ -296,6 +296,7 @@ app.delete("/deleteThesis/:id", (req, res) => {
   const id = req.params.id;
 
   var sql = "DELETE FROM tbl_thesis WHERE thesis_id = ?" 
+  
 
   db.query(sql, id,
     (err, result) => {
