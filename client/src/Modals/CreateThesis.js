@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import ReactDom from "react-dom";
 import { Modal, Row, Col, Button, Form } from "react-bootstrap";
 import Axios from "axios";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify"; 
 import 'react-toastify/dist/ReactToastify.css'
+import "../sass/modals/_createthesis.scss";
+import YearSection from "./YearSection";
 
 const CreateThesis = () => {
   //Use States for Modal
   const [show, setShow] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [yearSection, setYearSection] = useState(false);
 
   //Use States for Thesis Content
   const [title, setTitle] = useState("");
@@ -73,6 +77,10 @@ const CreateThesis = () => {
   const resetForm = () => {
     document.getElementById("addFormId").reset();
   };
+
+  const addYearSec = () => {
+    setYearSection(!yearSection);
+  }
 
   //Add Data to MySql
   const addThesisData = async () => {
@@ -159,8 +167,10 @@ const CreateThesis = () => {
         centered
         dialogClassName="AddModal"
       >
-        <Modal.Header closeButton>Add Thesis Details</Modal.Header>
-        <Modal.Body>
+        <Modal.Header closeButton>
+          {!yearSection ? "Add Thesis Details" : "Edit Year/Section"}
+        </Modal.Header>
+        <Modal.Body className={!yearSection ? "visibleEl" : "hiddenEl"}>
           <Form
             noValidate
             validated={validated}
@@ -182,7 +192,11 @@ const CreateThesis = () => {
                     Please enter a title.
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} className="mb-3" controlId="formGridStateCours">
+                <Form.Group
+                  as={Col}
+                  className="mb-3"
+                  controlId="formGridStateCours"
+                >
                   <Form.Label>Course</Form.Label>
                   <Form.Select
                     onChange={(e) => setCourse(e.target.value)}
@@ -208,6 +222,15 @@ const CreateThesis = () => {
                           );
                         })}
                       </Form.Select>
+                      <Form.Text className="text-muted">
+                        <Button
+                          variant="link"
+                          style={{ fontSize: "smaller", paddingLeft: "0" }}
+                          onClick={addYearSec}
+                        >
+                          + Add Year Level
+                        </Button>
+                      </Form.Text>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -223,6 +246,14 @@ const CreateThesis = () => {
                           );
                         })}
                       </Form.Select>
+                      <Form.Text className="text-muted">
+                        <Button
+                          variant="link"
+                          style={{ fontSize: "smaller", paddingLeft: "0" }}
+                        >
+                          + Add Section
+                        </Button>
+                      </Form.Text>
                     </Form.Group>
                   </Col>{" "}
                   <Col>
@@ -327,11 +358,7 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Form.Group
-                  as={Col}
-                  className="mb-3"
-                  controlId="formGridKey"
-                >
+                <Form.Group as={Col} className="mb-3" controlId="formGridKey">
                   <Form.Label>Keywords</Form.Label>
                   <Form.Control
                     type="text"
@@ -415,6 +442,14 @@ const CreateThesis = () => {
             </div>
           </Form>
         </Modal.Body>
+        <Modal.Body className={!yearSection ? "hiddenEl" : "visibleEl"}>
+          {yearSection && <YearSection yearLevel={yearLevelData} />}
+        </Modal.Body>
+        <Modal.Footer className={!yearSection ? "hiddenEl" : "visibleEl"}>
+          <Button className="mt-2" variant="primary" onClick={() => setYearSection(!yearSection)}>
+            Back to Adding
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>,
     document.getElementById("modal-root")
