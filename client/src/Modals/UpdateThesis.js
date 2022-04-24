@@ -12,7 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import Axios from "axios";
-import ImportPDF from "../Components/ImportPDF"
+import ImportPDF from "../Components/ImportPDF";
 import "../sass/modals/_updatethesis.scss";
 
 const UpdateThesis = ({ thesisId, singleThesis }) => {
@@ -109,13 +109,14 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
     Axios.request({
       method: "put",
       url: "http://localhost:3001/update",
-      data: data
-    }).then(data => {
-      notifySuccess();
-    }).catch(error => {
-      notifyError();
+      data: data,
     })
-
+      .then((data) => {
+        notifySuccess();
+      })
+      .catch((error) => {
+        notifyError();
+      });
   };
 
   const setData = () => {
@@ -164,10 +165,10 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
         panelists: panelists,
         course: course,
         year: yearPublished,
-        chairperson: chairperson
+        chairperson: chairperson,
       },
     });
-  }
+  };
 
   //Submit Function
   const handleUpdateForm = (event) => {
@@ -494,7 +495,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                   className={!checked ? "visibleEl" : "hiddenEl"}
                   onClick={importAsPDF}
                 >
-                  Import as PDF
+                  Print as PDF
                 </Button>
               </Col>
             </Row>

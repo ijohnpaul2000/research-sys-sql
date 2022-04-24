@@ -1,15 +1,43 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import "../sass/components/_importpdf.scss";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ImportPDF = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const openWindow = () => {
     window.print();
-  }, [])
-  
+  };
+  useEffect(() => {
+    setTimeout(openWindow, 1000);
+
+    (function () {
+      var beforePrint = function () {
+        console.log("Printing...");
+      };
+
+      var afterPrint = function () {
+        navigate("/manuscript");
+      };
+
+      if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia("print");
+        mediaQueryList.addListener(function (mql) {
+          if (mql.matches) {
+            beforePrint();
+          } else {
+            afterPrint();
+          }
+        });
+      }
+
+      window.onbeforeprint = beforePrint;
+      window.onafterprint = afterPrint;
+    })();
+  }, []);
+
   return (
     <div className="container">
       <div className="header">
@@ -21,14 +49,10 @@ const ImportPDF = () => {
       </div>
       <div className="body">
         <div className="title">
-          <h1>
-            {location.state.title}
-          </h1>
+          <h1>{location.state.title}</h1>
         </div>
         <div className="abstract">
-          <p>
-            {location.state.abstract}
-          </p>
+          <p>{location.state.abstract}</p>
         </div>
         <div className="person">
           <p>Authors: {location.state.authors}</p>

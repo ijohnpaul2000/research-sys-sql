@@ -46,7 +46,7 @@ const db = mysql.createConnection({
 });
 
 //* * Method for getting the DEAN, CHAIRPERSON, ENCODER Sessions
-app.get("/login", (req, res) => { 
+app.get("/login", (req, res) => {
   if (req.session.user) {
     res.send({ loggedIn: true, user: req.session.user });
   } else {
@@ -218,7 +218,6 @@ app.post("/deleteAudits", (req, res) => {
 
 //Retrieving Manuscripts
 app.get("/manuscripts", (req, res) => {
-
   let sql = "SELECT * FROM tbl_thesis";
 
   db.query(sql, (err, result) => {
@@ -248,16 +247,36 @@ app.post("/create", (req, res) => {
   const dean = req.body.dean;
   const abstract = req.body.abstract;
 
-  var sql = "INSERT INTO tbl_thesis (title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  var sql =
+    "INSERT INTO tbl_thesis (title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-  db.query(sql, [title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract],
+  db.query(
+    sql,
+    [
+      title,
+      course,
+      yearLevel,
+      section,
+      yearPublished,
+      authors,
+      panelists,
+      copies,
+      volume,
+      grades,
+      keywords,
+      adviser,
+      chairperson,
+      dean,
+      abstract,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
         res.send("New Value Inserted");
       }
-    })
+    }
+  );
 });
 
 //Updating Thesis Content
@@ -279,39 +298,57 @@ app.put("/update", (req, res) => {
   const dean = req.body.dean;
   const abstract = req.body.abstract;
 
-  var sql = "UPDATE tbl_thesis SET title = ? , course = ?, yearLevel = ?, section = ?, yearPublished = ?, authors = ? , panelists = ?, copies = ?, volume = ?, grades = ?, keywords = ? , adviser = ?, chairperson = ?, dean = ?, abstract = ? WHERE thesis_id = ?";
+  var sql =
+    "UPDATE tbl_thesis SET title = ? , course = ?, yearLevel = ?, section = ?, yearPublished = ?, authors = ? , panelists = ?, copies = ?, volume = ?, grades = ?, keywords = ? , adviser = ?, chairperson = ?, dean = ?, abstract = ? WHERE thesis_id = ?";
 
-  db.query(sql, [title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract, id],
+  db.query(
+    sql,
+    [
+      title,
+      course,
+      yearLevel,
+      section,
+      yearPublished,
+      authors,
+      panelists,
+      copies,
+      volume,
+      grades,
+      keywords,
+      adviser,
+      chairperson,
+      dean,
+      abstract,
+      id,
+    ],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
         res.send("New Value Updated");
       }
-    })
+    }
+  );
 });
 
 //Deleting Thesis Content
 app.delete("/deleteThesis/:id", (req, res) => {
   const id = req.params.id;
 
-  var sql = "DELETE FROM tbl_thesis WHERE thesis_id = ?" 
-  
+  var sql = "DELETE FROM tbl_thesis WHERE thesis_id = ?";
 
-  db.query(sql, id,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("Value Deleted");
-      }
-    })
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Value Deleted");
+    }
+  });
 });
 
 // SECTION
 //Retrieving Sections
 app.get("/sections", (req, res) => {
-
   let sql = "SELECT * FROM tbl_section";
 
   db.query(sql, (err, result) => {
@@ -326,7 +363,6 @@ app.get("/sections", (req, res) => {
 //Year Level
 //Retrieving Year Level
 app.get("/yearlevel", (req, res) => {
-
   let sql = "SELECT * FROM tbl_yearlevel";
 
   db.query(sql, (err, result) => {
@@ -337,7 +373,6 @@ app.get("/yearlevel", (req, res) => {
     }
   });
 });
-
 
 app.listen(3001, () => {
   console.log("running server");

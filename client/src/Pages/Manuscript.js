@@ -6,7 +6,7 @@ import {
   Button,
   Dropdown,
   DropdownButton,
-  ButtonGroup
+  ButtonGroup,
 } from "react-bootstrap";
 import {
   BsFillPencilFill,
@@ -15,20 +15,21 @@ import {
   BsTrash,
 } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import "../sass/pages/_manuscript.scss"
+import "../sass/pages/_manuscript.scss";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import NotAuthenticated from "../Components/NotAuthenticated";
 import CreateGuest from "../Modals/CreateGuest";
-import CreateThesis from "../Modals/CreateThesis"
+import CreateThesis from "../Modals/CreateThesis";
 import Audit from "../AuditTrails/Audit";
-import { Chip, Stack, Avatar } from '@mui/material';
+import { Chip, Stack, Avatar } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import UpdateThesis from "../Modals/UpdateThesis";
 import DeleteThesis from "../Modals/DeleteThesis";
+import { timeIn } from "./Login";
+import Cookies from "universal-cookie";
 
 var dayjs = require("dayjs");
-
 const Manuscript = () => {
   //Modal States
   const [showModal, setShowModal] = useState(false);
@@ -130,11 +131,14 @@ const Manuscript = () => {
   };
 
   const logoutUser = () => {
+    const cookies = new Cookies();
     Axios.post("http://localhost:3001/addAudit", {
       accessedBy: role,
-      timeIn: auditTimeIn,
+      timeIn: cookies.get("timeIn"),
       timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
-      deletedAt: dayjs(auditTimeIn).add(1, "w").format("YYYY-MM-DD HH:mm:ss"),
+      deletedAt: dayjs(cookies.get("timeIn"))
+        .add(1, "w")
+        .format("YYYY-MM-DD HH:mm:ss"),
       permittedBy: permittedBy,
     }).then((response) => {
       console.log(
@@ -146,11 +150,11 @@ const Manuscript = () => {
       setIsAuthenticated(false);
     });
     setTimeout(timeout, 1000);
+
+    cookies.remove("timeIn");
   };
 
   useEffect(() => {
-    setAuditTimeIn(dayjs().format("YYYY-MM-DD hh:mm:ss"));
-
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn === true) {
         setIsAuthenticated(true);
@@ -168,8 +172,28 @@ const Manuscript = () => {
     });
   }, []);
 
-    //Open View Info Modal
-    const openViewInfo = (
+  //Open View Info Modal
+  const openViewInfo = (
+    id,
+    title,
+    course,
+    yearLevel,
+    section,
+    authors,
+    panelists,
+    noOfCopies,
+    volumeNo,
+    grades,
+    keywords,
+    adviser,
+    chairperson,
+    dean,
+    abstract,
+    year
+  ) => {
+    setThesisId(id);
+
+    const data = {
       id,
       title,
       course,
@@ -185,37 +209,17 @@ const Manuscript = () => {
       chairperson,
       dean,
       abstract,
-      year
-    ) => {
-      setThesisId(id);
-  
-      const data = {
-        id,
-        title,
-        course,
-        yearLevel,
-        section,
-        authors,
-        panelists,
-        noOfCopies,
-        volumeNo,
-        grades,
-        keywords,
-        adviser,
-        chairperson,
-        dean,
-        abstract,
-        year
-      };
-      setSingleThesis(data);
-      setShowEditModal(true);
+      year,
     };
+    setSingleThesis(data);
+    setShowEditModal(true);
+  };
 
-    const openDeleteModal = (id, title) => {
-      setThesisId(id);
-      setTitle(title);
-      setShowDeleteModal(true)
-    }
+  const openDeleteModal = (id, title) => {
+    setThesisId(id);
+    setTitle(title);
+    setShowDeleteModal(true);
+  };
 
   return (
     <>
