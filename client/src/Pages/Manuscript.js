@@ -97,7 +97,9 @@ const Manuscript = () => {
                   cellValues.row.chairperson,
                   cellValues.row.dean,
                   cellValues.row.abstract,
-                  cellValues.row.yearPublished
+                  cellValues.row.yearPublished,
+                  cellValues.row.journal,
+                  cellValues.row.journal_name
                 );
               }}
             >
@@ -189,7 +191,9 @@ const Manuscript = () => {
     chairperson,
     dean,
     abstract,
-    year
+    year,
+    journal,
+    journal_name
   ) => {
     setThesisId(id);
 
@@ -210,6 +214,8 @@ const Manuscript = () => {
       dean,
       abstract,
       year,
+      journal,
+      journal_name,
     };
     setSingleThesis(data);
     setShowEditModal(true);

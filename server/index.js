@@ -17,6 +17,7 @@ app.use(
     origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    optionSuccessStatus: 200,
   })
 );
 app.use(cookieParser());
@@ -41,9 +42,37 @@ app.use(
 const db = mysql.createConnection({
   user: "root",
   host: "localhost",
-  password: "",
+  password: "password",
   database: "manuscript_db",
 });
+
+// app.use(express.json({ limit: "50mb" }));
+// app.use(express.urlencoded({ extended: true }));
+
+// app.get("/image/:id", (req, res) => {
+//   const { id } = req.params;
+//   const query = "Select file_data From file Where id = ?";
+//   con.query(query, [id], (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     }
+//     // console.log(Buffer.from(result[0].file_data).toString())
+//     res.render("imageView", { name: result[0].file_data });
+//   });
+// });
+
+// app.post("/store", (req, res) => {
+//   const { image, fileName } = req.body;
+//   const query =
+//     "Insert Into file(file_name, file_data, created_by, created_on) Values(?,?,?,CURRENT_TIMESTAMP)";
+//   con.query(query, [fileName, image, "Program"], (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send({ msg: "SERVER_ERROR" });
+//     }
+//     res.status(200).send({ id: result.insertId });
+//   });
+// });
 
 //* * Method for getting the DEAN, CHAIRPERSON, ENCODER Sessions
 app.get("/login", (req, res) => {
@@ -246,9 +275,11 @@ app.post("/create", (req, res) => {
   const chairperson = req.body.chairperson;
   const dean = req.body.dean;
   const abstract = req.body.abstract;
+  const journal = req.body.journal;
+  const journal_name = req.body.journal_name;
 
   var sql =
-    "INSERT INTO tbl_thesis (title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO tbl_thesis (title, course, yearLevel, section, yearPublished, authors, panelists, copies, volume, grades, keywords, adviser, chairperson, dean, abstract,journal,journal_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   db.query(
     sql,
@@ -268,11 +299,14 @@ app.post("/create", (req, res) => {
       chairperson,
       dean,
       abstract,
+      journal,
+      journal_name,
     ],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
+        console.log(result);
         res.send("New Value Inserted");
       }
     }

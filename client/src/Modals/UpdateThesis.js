@@ -37,9 +37,13 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
   const [chairperson, setChairperson] = useState("");
   const [dean, setDean] = useState("");
   const [abstract, setAbstract] = useState("");
+  const [journal, setJournal] = useState("");
+  const [journalName, setJournalName] = useState("");
   const [sectionData, setSectionData] = useState([]);
   const [yearLevelData, setYearLevelData] = useState([]);
 
+  const [fileBlob, setFileBlob] = useState();
+  const [link, setLink] = useState();
   let currentYear = new Date().getFullYear();
 
   //List Years (10 years ago)
@@ -104,6 +108,8 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
       chairperson: chairperson,
       dean: dean,
       abstract: abstract,
+      journal: journal,
+      journal_name: journalName,
     };
 
     Axios.request({
@@ -135,10 +141,45 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
     setChairperson(singleThesis.chairperson);
     setDean(singleThesis.dean);
     setAbstract(singleThesis.abstract);
+    setJournal(singleThesis.journal);
+    setJournalName(singleThesis.journal_name);
   };
+
+  // const downloadFile = (blob, fileName) => {
+  //   const link = document.createElement("a");
+  //   // create a blobURI pointing to our Blob
+  //   link.href = URL.createObjectURL(blob);
+  //   link.download = fileName;
+  //   // some browser needs the anchor to be in the doc
+  //   document.body.append(link);
+  //   link.click();
+  //   link.remove();
+  //   // in case the Blob uses a lot of memory
+  //   setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  // };
+  // downloadFile(new Blob([{ journal }]), "myfile.pdf");
+  // function download(pdfUrl) {
+  //   fetch(pdfUrl)
+  //     .then((resp) => resp.arrayBuffer())
+  //     .then((resp) => {
+  //       // set the blog type to final pdf
+  //       const file = new Blob([resp], { type: "application/pdf" });
+
+  //       // process to auto download it
+  //       const fileURL = URL.createObjectURL(file);
+  //       setFileBlob(fileURL);
+  //       const link = document.createElement("a");
+  //       link.href = fileURL;
+  //       link.download = "FileName" + new Date() + ".pdf";
+  //       link.click();
+
+  //       console.log("file from updatethesis", file);
+  //     });
+  // }
 
   useEffect(() => {
     setData();
+    console.log("JOURNAL_BLOB: ", journal);
   }, []);
 
   //Retrieving Year Level/Sections
@@ -463,6 +504,12 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                     <Form.Control.Feedback type="invalid">
                       Please enter Abstract Details.
                     </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group>
+                    <a id="journal-link" download={`${journalName}`}>
+                      {journalName}
+                    </a>
                   </Form.Group>
                 </Col>
               </Row>

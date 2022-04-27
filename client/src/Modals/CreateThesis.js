@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDom from "react-dom";
 import { Modal, Row, Col, Button, Form } from "react-bootstrap";
 import Axios from "axios";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify"; 
-import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../sass/modals/_createthesis.scss";
 import YearSection from "./YearSection";
+import axios from "axios";
 
 const CreateThesis = () => {
   //Use States for Modal
@@ -20,7 +27,7 @@ const CreateThesis = () => {
   //Use States for Thesis Content
   const [title, setTitle] = useState("");
   const [course, setCourse] = useState("Information Technology");
-  const [yearLevel, setYearLevel] = useState("3")
+  const [yearLevel, setYearLevel] = useState("3");
   const [section, setSection] = useState("1");
   const [yearPublished, setYearPublished] = useState("2022");
   const [authors, setAuthors] = useState("");
@@ -33,17 +40,24 @@ const CreateThesis = () => {
   const [chairperson, setChairperson] = useState("");
   const [dean, setDean] = useState("");
   const [abstract, setAbstract] = useState("");
+  const [journal, setJournal] = useState("");
+  const [journal_name, setJournal_Name] = useState("");
+  const [softcopy, setSoftcopy] = useState("");
+  const [softcopy_name, setSoftcopy_Name] = useState("");
+
   const [sectionData, setSectionData] = useState([]);
   const [yearLevelData, setYearLevelData] = useState([]);
 
   let navigate = useNavigate();
   let currentYear = new Date().getFullYear();
-  
+
   //List Years (10 years ago)
   let yearList = [];
   for (let yr = currentYear; yr > currentYear - 10; yr--) {
     yearList.push(yr);
   }
+
+  //FOR FDF AND WORD
 
   //Toast Controller
   const notifySuccess = () =>
@@ -57,7 +71,7 @@ const CreateThesis = () => {
       progress: undefined,
     });
 
-    const notifyError = () =>
+  const notifyError = () =>
     toast.error("Something went wrong.", {
       position: "top-center",
       autoClose: 1000,
@@ -80,11 +94,10 @@ const CreateThesis = () => {
 
   const addYearSec = () => {
     setYearSection(!yearSection);
-  }
+  };
 
   //Add Data to MySql
   const addThesisData = async () => {
-
     const data = {
       title: title,
       course: course,
@@ -101,17 +114,23 @@ const CreateThesis = () => {
       chairperson: chairperson,
       dean: dean,
       abstract: abstract,
-    }
+      journal: journal,
+      journal_name: journal_name,
+      softcopy: softcopy,
+      softcopy_name: softcopy_name,
+    };
 
     Axios.request({
       method: "post",
       url: "http://localhost:3001/create",
-      data: data
-    }).then(data => {
-      notifySuccess();
-    }).catch(error => {
-      notifyError();
+      data: data,
     })
+      .then((data) => {
+        notifySuccess();
+      })
+      .catch((error) => {
+        notifyError();
+      });
   };
 
   //Submit Function
@@ -133,12 +152,12 @@ const CreateThesis = () => {
   //Retrieving Year Level/Sections
   useEffect(() => {
     Axios.get("http://localhost:3001/sections").then((response) => {
-      // console.log(response); 
+      // console.log(response);
       setSectionData(response.data);
     });
 
     Axios.get("http://localhost:3001/yearlevel").then((response) => {
-      // console.log(response); 
+      // console.log(response);
       setYearLevelData(response.data);
     });
   }, []);
@@ -434,6 +453,86 @@ const CreateThesis = () => {
                     Please enter Abstract Details.
                   </Form.Control.Feedback>
                 </Form.Group>
+
+                <Form.Group>
+                  <Form.Label>For Journal</Form.Label>
+                  <input
+                    type="file"
+                    id="file-input"
+                    accept="*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      const journal_name = e.target.files[0].name;
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      console.log(
+                        "the file is: ",
+                        file,
+                        "\n the journal is:",
+                        journal_name
+                      );
+                      reader.onload = () => {
+                        fetch("http://localhost:3001/create", {
+                          method: "POST",
+                          body: {
+                            journal: setJournal(reader.result),
+                            journal_name: setJournal_Name(journal_name),
+                          },
+                        })
+                          .then(async (res) => {
+                            const result = await res.json();
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      };
+                      reader.onerror = () => {
+                        console.log(reader.error);
+                      };
+                    }}
+                  />
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label style={{ marginTop: "1.5rem" }}>
+                    For Softcopy
+                  </Form.Label>
+                  <input
+                    type="file"
+                    id="file-input"
+                    accept="*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      const softcopy_name = e.target.files[0].name;
+                      const reader = new FileReader();
+                      reader.readAsDataURL(file);
+                      console.log(
+                        "the file is: ",
+                        file,
+                        "\n the softcopy is:",
+                        softcopy_name
+                      );
+                      reader.onload = () => {
+                        fetch("http://localhost:3001/create", {
+                          method: "POST",
+                          body: {
+                            journal: setSoftcopy(reader.result),
+                            journal_name: setSoftcopy_Name(softcopy_name),
+                          },
+                        })
+                          .then(async (res) => {
+                            const result = await res.json();
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      };
+                      reader.onerror = () => {
+                        console.log(reader.error);
+                      };
+                    }}
+                  />
+                </Form.Group>
               </Col>
             </Row>
 
@@ -446,7 +545,11 @@ const CreateThesis = () => {
           {yearSection && <YearSection yearLevel={yearLevelData} />}
         </Modal.Body>
         <Modal.Footer className={!yearSection ? "hiddenEl" : "visibleEl"}>
-          <Button className="mt-2" variant="primary" onClick={() => setYearSection(!yearSection)}>
+          <Button
+            className="mt-2"
+            variant="primary"
+            onClick={() => setYearSection(!yearSection)}
+          >
             Back to Adding
           </Button>
         </Modal.Footer>
