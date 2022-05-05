@@ -48,6 +48,8 @@ const CreateThesis = () => {
   const [sectionData, setSectionData] = useState([]);
   const [yearLevelData, setYearLevelData] = useState([]);
 
+  const [key, setKey] = useState("");
+
   let navigate = useNavigate();
   let currentYear = new Date().getFullYear();
 
@@ -92,9 +94,16 @@ const CreateThesis = () => {
     document.getElementById("addFormId").reset();
   };
 
-  const addYearSec = () => {
+  const addYearLev = () => {
     setYearSection(!yearSection);
+    setKey("yr");
   };
+
+  const addSec = () => {
+    setYearSection(!yearSection);
+    setKey("sec");
+  };
+
 
   //Add Data to MySql
   const addThesisData = async () => {
@@ -245,7 +254,7 @@ const CreateThesis = () => {
                         <Button
                           variant="link"
                           style={{ fontSize: "smaller", paddingLeft: "0" }}
-                          onClick={addYearSec}
+                          onClick={addYearLev}
                         >
                           + Add Year Level
                         </Button>
@@ -269,6 +278,7 @@ const CreateThesis = () => {
                         <Button
                           variant="link"
                           style={{ fontSize: "smaller", paddingLeft: "0" }}
+                          onClick={addSec}
                         >
                           + Add Section
                         </Button>
@@ -542,7 +552,7 @@ const CreateThesis = () => {
           </Form>
         </Modal.Body>
         <Modal.Body className={!yearSection ? "hiddenEl" : "visibleEl"}>
-          {yearSection && <YearSection yearLevel={yearLevelData} />}
+          {yearSection && <YearSection yearLevelData={yearLevelData} sectionData={sectionData} tabKey={key} />}
         </Modal.Body>
         <Modal.Footer className={!yearSection ? "hiddenEl" : "visibleEl"}>
           <Button

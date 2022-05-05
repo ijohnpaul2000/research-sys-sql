@@ -394,7 +394,37 @@ app.get("/sections", (req, res) => {
   });
 });
 
-//Year Level
+//Add Section
+app.post("/addsec", (req, res) => {
+  const section = req.body.section;
+  let sql = "INSERT INTO tbl_section (section) VALUES (?)";
+
+  db.query(sql, [section], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send("New Value Inserted");
+    }
+  });
+});
+
+//Deleting Section
+app.delete("/deleteSec/:id", (req, res) => {
+  const id = req.params.id;
+
+  var sql = "DELETE FROM tbl_section WHERE section_id = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Value Deleted");
+    }
+  });
+});
+
+//YEAR LEVEL
 //Retrieving Year Level
 app.get("/yearlevel", (req, res) => {
   let sql = "SELECT * FROM tbl_yearlevel";
@@ -404,6 +434,36 @@ app.get("/yearlevel", (req, res) => {
       console.log(err);
     } else {
       res.send(result);
+    }
+  });
+});
+
+//Add Year Level
+app.post("/addyr", (req, res) => {
+  const yearLevel = req.body.yearLevel;
+  let sql = "INSERT INTO tbl_yearlevel (yearLevel) VALUES (?)";
+
+  db.query(sql, [yearLevel], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send("New Value Inserted");
+    }
+  });
+});
+
+//Deleting Year Level
+app.delete("/deleteYear/:id", (req, res) => {
+  const id = req.params.id;
+
+  var sql = "DELETE FROM tbl_yearlevel WHERE yearLevel_id = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Value Deleted");
     }
   });
 });
