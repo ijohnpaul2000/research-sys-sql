@@ -466,7 +466,7 @@ const CreateThesis = () => {
 
                 <Form.Group>
                   <Form.Label>For Journal</Form.Label>
-                  <input
+                  <Form.Control
                     type="file"
                     id="file-input"
                     accept="*"
@@ -507,7 +507,7 @@ const CreateThesis = () => {
                   <Form.Label style={{ marginTop: "1.5rem" }}>
                     For Softcopy
                   </Form.Label>
-                  <input
+                  <Form.Control
                     type="file"
                     id="file-input"
                     accept="*"
