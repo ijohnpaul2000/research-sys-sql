@@ -33,26 +33,27 @@ const Audit = ({ permittedBy }) => {
       setData(response.data);
     });
 
-    Axios.post("http://localhost:3001/deleteAudits").then((response) => {
-      console.log(JSON.stringify(response));
-    });
+    //* Uncomment this function if you wanted to delete the audits after a (1) week.
+    // Axios.post("http://localhost:3001/deleteAudits").then((response) => {
+    //   console.log(JSON.stringify(response));
+    // })
   }, []);
   return ReactDom.createPortal(
-      <div>
-        <Container fluid>
-          <Modal size="lg" show={show} keyboard={false} onHide={handleClose}>
-            <Modal.Header closeButton></Modal.Header>
-            <div style={{ height: "70vh", width: "100%" }}>
-              <DataGrid
-                rows={data}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-              />
-            </div>
-          </Modal>{" "}
-        </Container>
-      </div>,
+    <div>
+      <Container fluid>
+        <Modal size="lg" show={show} keyboard={false} onHide={handleClose}>
+          <Modal.Header closeButton></Modal.Header>
+          <div style={{ height: "70vh", width: "100%" }}>
+            <DataGrid
+              rows={data}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[10]}
+            />
+          </div>
+        </Modal>{" "}
+      </Container>
+    </div>,
     document.getElementById("modal-root")
   );
 };

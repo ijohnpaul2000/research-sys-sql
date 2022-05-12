@@ -1,31 +1,40 @@
 .navbar-container {
   height: 80px;
+  border-bottom: 1px solid gray;
 }
 .brand {
   font-weight: 700;
   font-family: var(--font-family);
   text-decoration: none;
+  &:hover {
+    transform: scale(0.99);
+  }
 }
 .link {
   text-decoration: none;
+  padding: 0.5rem;
   font-weight: 500;
   color: var(--textColor);
   font-family: var(--font-family);
 
   &:hover {
-    color: var(--accent-color2);
+    transform: scale(0.95);
+    color: var(--button);
   }
 }
 
 .link_user {
-  background-color: var(--button);
-  padding: 0.2rem 1.2rem;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 3rem;
+  color: #fff !important;
   border-radius: 10px;
-  color: var(--background);
-  opacity: 0.9;
-  margin-left: 2rem;
+  background-color: var(--button);
+  color: var(--textColor);
+  font-family: var(--font-family);
+
   &:hover {
-    color: var(--background);
-    opacity: 1;
+    color: var(--modal) !important;
+    transform: scale(0.95);
   }
 }

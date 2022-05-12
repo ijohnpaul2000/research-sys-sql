@@ -30,7 +30,9 @@ import { timeIn } from "./Login";
 import Cookies from "universal-cookie";
 
 var dayjs = require("dayjs");
+
 const Manuscript = () => {
+  let navigate = useNavigate();
   //Modal States
   const [showModal, setShowModal] = useState(false);
   const [showAudits, setShowAudits] = useState(false);
@@ -40,10 +42,11 @@ const Manuscript = () => {
 
   //User States
   Axios.defaults.withCredentials = true;
+  const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [permittedBy, setPermittedBy] = useState("");
-  let navigate = useNavigate();
+
   const [auditTimeIn, setAuditTimeIn] = useState("");
 
   //Thesis States
@@ -109,18 +112,26 @@ const Manuscript = () => {
                 </div>
               </IconContext.Provider>
             </Button>
-            <Button
-              variant="danger"
-              onClick={() => {
-                openDeleteModal(cellValues.row.thesis_id, cellValues.row.title);
-              }}
-            >
-              <IconContext.Provider value={{ color: "#fff" }}>
-                <div>
-                  <BsTrash />
-                </div>
-              </IconContext.Provider>
-            </Button>
+
+            {role !== "Guest" && (
+              <>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    openDeleteModal(
+                      cellValues.row.thesis_id,
+                      cellValues.row.title
+                    );
+                  }}
+                >
+                  <IconContext.Provider value={{ color: "#fff" }}>
+                    <div>
+                      <BsTrash />
+                    </div>
+                  </IconContext.Provider>
+                </Button>
+              </>
+            )}
           </ButtonGroup>
         );
       },
@@ -158,13 +169,17 @@ const Manuscript = () => {
 
   useEffect(() => {
     Axios.get("http://localhost:3001/login").then((response) => {
+      console.log(response);
       if (response.data.loggedIn === true) {
         setIsAuthenticated(true);
+        setUsername(response.data.user[0].username);
         setRole(response.data.user[0].role);
         setPermittedBy(response.data.user[0].createdBy);
       } else {
       }
     });
+
+    console.log(permittedBy);
   }, [role, isAuthenticated]);
 
   useEffect(() => {
@@ -243,8 +258,21 @@ const Manuscript = () => {
                   }
                 />
               }
-              label={"Currenly Signed in as " + role}
+              label={"Currenly Signed in as " + username}
             />
+            <Chip
+              avatar={
+                <Avatar
+                  alt={role}
+                  src={
+                    "https://avatars.dicebear.com/api/jdenticon/" +
+                    Math.random() +
+                    ".svg"
+                  }
+                />
+              }
+              label={"User Type: " + role}
+            />{" "}
             <Chip
               className={role === "Guest" ? "visibleEl" : "hiddenEl"}
               label={"Permitted by: " + permittedBy}
@@ -257,34 +285,42 @@ const Manuscript = () => {
             </Row>
             <Row>
               <Col className="d-flex justify-content-end align-items-center py-4">
-                <Button
-                  className="mx-4"
-                  onClick={() => {
-                    setShowAddModal(true);
-                    console.log("Add Modal Open");
-                  }}
-                >
-                  Add Thesis
-                  {showAddModal && <CreateThesis />}
-                </Button>
+                {role !== "Guest" && (
+                  <Button
+                    className="mx-4"
+                    onClick={() => {
+                      setShowAddModal(true);
+                      console.log("Add Modal Open");
+                    }}
+                  >
+                    Add Thesis
+                    {showAddModal && <CreateThesis />}
+                  </Button>
+                )}
+
                 <DropdownButton id="dropdown-basic-button" title="Settings">
                   <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setShowModal(true);
-                    }}
-                  >
-                    Create Guest Credentials
-                    {showModal ? <CreateGuest createRole={role} /> : ""}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={() => {
-                      setShowAudits(true);
-                    }}
-                  >
-                    System History
-                    {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
-                  </Dropdown.Item>
+
+                  {role !== "Guest" && (
+                    <>
+                      <Dropdown.Item
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                      >
+                        Create Guest Credentials
+                        {showModal ? <CreateGuest createRole={role} /> : ""}
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => {
+                          setShowAudits(true);
+                        }}
+                      >
+                        System History
+                        {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
+                      </Dropdown.Item>
+                    </>
+                  )}
                 </DropdownButton>
               </Col>
             </Row>

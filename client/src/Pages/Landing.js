@@ -7,17 +7,12 @@ const Landing = () => {
   return (
     <>
       <NavigationBar />
-      <Container
-        fluid="md"
-        className="container d-flex justify-content-center align-items-center position-relative"
-      >
+      <Container fluid="md" className="">
         <Row className="landing">
           <Col
             s={12}
             md={6}
-            className="
-            
-            "
+            className="d-flex flex-column justify-content-center align-items-center"
           >
             <h1 className="title mb-4">CEIT Manuscript Information System</h1>
             <p className="description">

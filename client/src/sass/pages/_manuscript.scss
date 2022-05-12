@@ -1,10 +1,10 @@
 //Chip Visibility
 .visibleEl {
-  visibility: visible;
+  display: block;
 }
 
 .hiddenEl {
-  visibility: hidden;
+  display: none;
 }
 
 //Center button group
@@ -14,9 +14,12 @@
 }
 
 .manuscript-text {
-  font-family: "Montserrat";
-  font-size: x-large;
-  font-weight: 500;
+  font-family: var(--font-family);
+  color: var(--textColor);
+  font-size: var(--h1);
+  font-weight: bold;
   display: flex;
   justify-content: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

@@ -115,7 +115,9 @@ const CreateGuest = ({ createRole }) => {
                   }}
                 />
               </Form.Group>
-              <Button onClick={createGuestCredentials}>Submit</Button>
+              <Button onClick={createGuestCredentials} className="mb-3">
+                Submit
+              </Button>
               {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
               {successMessage && (
                 <Alert variant="success">{successMessage}</Alert>

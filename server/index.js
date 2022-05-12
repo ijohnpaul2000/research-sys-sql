@@ -46,33 +46,29 @@ const db = mysql.createConnection({
   database: "manuscript_db",
 });
 
-// app.use(express.json({ limit: "50mb" }));
-// app.use(express.urlencoded({ extended: true }));
+app.post("/register", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const role = req.body.role;
 
-// app.get("/image/:id", (req, res) => {
-//   const { id } = req.params;
-//   const query = "Select file_data From file Where id = ?";
-//   con.query(query, [id], (err, result) => {
-//     if (err) {
-//       console.log(err);
-//     }
-//     // console.log(Buffer.from(result[0].file_data).toString())
-//     res.render("imageView", { name: result[0].file_data });
-//   });
-// });
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
 
-// app.post("/store", (req, res) => {
-//   const { image, fileName } = req.body;
-//   const query =
-//     "Insert Into file(file_name, file_data, created_by, created_on) Values(?,?,?,CURRENT_TIMESTAMP)";
-//   con.query(query, [fileName, image, "Program"], (err, result) => {
-//     if (err) {
-//       console.log(err);
-//       res.status(500).send({ msg: "SERVER_ERROR" });
-//     }
-//     res.status(200).send({ id: result.insertId });
-//   });
-// });
+    db.query(
+      "INSERT INTO tbl_users (username, password,role) VALUES (?,?,?)",
+      [username, hash, role],
+      (err, result) => {
+        if (result) {
+          res.send(result);
+        } else {
+          res.send({ message: "This data is existing and may be expired." });
+        }
+      }
+    );
+  });
+});
 
 //* * Method for getting the DEAN, CHAIRPERSON, ENCODER Sessions
 app.get("/login", (req, res) => {

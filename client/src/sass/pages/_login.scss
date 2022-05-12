@@ -1,5 +1,5 @@
 .landing_container {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 90px);
   overflow-x: hidden;
 }
 .login {
@@ -16,12 +16,13 @@
 .label {
   font-family: var(--font-family);
   font-size: 1rem;
-  color: var(--accent-color2);
+  color: white;
+  color: var(--textColor);
 }
 .input {
   font-family: var(--font-family);
   font-size: 0.9rem;
-  color: var(--accent-color2);
+  color: var(--inputBoxes);
   background-color: var(--inputBoxes) !important;
 }
 .form-header {

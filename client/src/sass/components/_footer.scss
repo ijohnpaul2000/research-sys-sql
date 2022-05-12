@@ -4,4 +4,8 @@
   bottom: 0px;
   display: grid;
   place-content: center;
+
+  @media screen and (max-width: 768px) {
+    padding: 1rem 0;
+  }
 }
