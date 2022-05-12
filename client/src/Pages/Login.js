@@ -60,13 +60,13 @@ const Landing = (props) => {
       <NavigationBar />
       <Container
         fluid="md"
-        className="landing_container d-flex justify-content-center align-items-center"
+        className="guest_container d-flex justify-content-center align-items-center"
       >
         <Row>
           <Col
             sm={12}
             md={6}
-            className=" d-flex flex-column justify-content-center"
+            className="landing_container d-flex flex-column justify-content-center"
           >
             <div className="p-4 box">
               <p className="login">Login</p>

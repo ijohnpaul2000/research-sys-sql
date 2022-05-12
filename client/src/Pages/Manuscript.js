@@ -251,12 +251,22 @@ const Manuscript = () => {
               variant="outlined"
             />
           </Stack>
-          <Container fluid="md" className="manuscript_container">
+          <Container fluid="md" className="manuscript_container p">
             <Row>
               <Col className="manuscript-text mb-4">Manuscript List</Col>
             </Row>
             <Row>
-              <Col className="d-flex justify-content-end align-items-center">
+              <Col className="d-flex justify-content-end align-items-center py-4">
+                <Button
+                  className="mx-4"
+                  onClick={() => {
+                    setShowAddModal(true);
+                    console.log("Add Modal Open");
+                  }}
+                >
+                  Add Thesis
+                  {showAddModal && <CreateThesis />}
+                </Button>
                 <DropdownButton id="dropdown-basic-button" title="Settings">
                   <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
                   <Dropdown.Item
@@ -278,24 +288,8 @@ const Manuscript = () => {
                 </DropdownButton>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <Button>Export Masterlist</Button>
-                <Button>Import Masterlist</Button>
-                <Button>Export PDFs</Button>
-                <Button
-                  onClick={() => {
-                    setShowAddModal(true);
-                    console.log("Add Modal Open");
-                  }}
-                >
-                  Add Thesis
-                  {showAddModal && <CreateThesis />}
-                </Button>
-              </Col>
-            </Row>
           </Container>
-          <div style={{ height: 400, width: "100%" }}>
+          <div style={{ height: 400, width: "100%", padding: "40px" }}>
             <DataGrid
               rows={thesisData}
               columns={columns}

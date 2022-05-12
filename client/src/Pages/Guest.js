@@ -47,11 +47,6 @@ const Guest = () => {
     });
   };
 
-  useEffect(() => {
-    console.log(guestUsername);
-    console.log(guestPassword);
-  }, [guestUsername, guestPassword]);
-
   return (
     <>
       <NavigationBar />

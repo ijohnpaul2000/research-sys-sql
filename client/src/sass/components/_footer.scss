@@ -1,3 +1,7 @@
 .footer_container {
-  height: 80px;
+  max-height: 80px;
+  position: sticky;
+  bottom: 0px;
+  display: grid;
+  place-content: center;
 }
