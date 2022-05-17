@@ -13,29 +13,42 @@ const ImportPDF = () => {
   useEffect(() => {
     setTimeout(openWindow, 1000);
 
-    (function () {
-      var beforePrint = function () {
+    const print = () => {
+      const beforePrinting = () => {
         console.log("Printing...");
       };
-
-      var afterPrint = function () {
+      const afterPrinting = () => {
+        console.log("Done!");
         navigate("/manuscript");
       };
+      window.onbeforeprint = beforePrinting;
+      window.onafterprint = afterPrinting;
+    };
+    print();
 
-      if (window.matchMedia) {
-        var mediaQueryList = window.matchMedia("print");
-        mediaQueryList.addListener(function (mql) {
-          if (mql.matches) {
-            beforePrint();
-          } else {
-            afterPrint();
-          }
-        });
-      }
+    // (function () {
+    //   var beforePrint = function () {
+    //     console.log("Printing...");
+    //   };
 
-      window.onbeforeprint = beforePrint;
-      window.onafterprint = afterPrint;
-    })();
+    //   var afterPrint = function () {
+    //     navigate("/manuscript");
+    //   };
+
+    //   if (window.matchMedia) {
+    //     var mediaQueryList = window.matchMedia("print");
+    // mediaQueryList.addListener(function (mql) {
+    //   if (mql.matches) {
+    //     beforePrint();
+    //   } else {
+    //     afterPrint();
+    //   }
+    // });
+    //   }
+
+    //   window.onbeforeprint = beforePrint;
+    //   window.onafterprint = afterPrint;
+    // })();
   }, []);
 
   return (

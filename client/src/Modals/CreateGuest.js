@@ -23,6 +23,10 @@ const CreateGuest = ({ createRole }) => {
   const [guestUsername, setGuestUsername] = useState("");
   const [guestPassword, setGuestPassword] = useState("");
 
+  //*  For button
+
+  const [isDisabled, setIsDisabled] = useState(false);
+
   let createdAt = dayjs().format("YYYY-MM-DD hh:mm:ss");
   let expiredAt = dayjs(createdAt).add(1, "days").format("YYYY-MM-DD hh:mm:ss");
 
@@ -56,9 +60,13 @@ const CreateGuest = ({ createRole }) => {
         createdBy: createRole,
       }).then((response) => {
         console.log(JSON.stringify(response));
-        setSuccessMessage("Success, you may let the guest use this data.");
-        setTimeout(clearSuccessMessage, 2000);
-        setTimeout(handleClose, 2000);
+
+        if (!response.data.message) {
+          setSuccessMessage("Success, you may let the guest use this data.");
+          setTimeout(clearSuccessMessage, 2000);
+          setTimeout(handleClose, 2000);
+          setIsDisabled(true);
+        }
 
         if (response.data.message) {
           setErrorMessage(response.data.message);
@@ -115,7 +123,11 @@ const CreateGuest = ({ createRole }) => {
                   }}
                 />
               </Form.Group>
-              <Button onClick={createGuestCredentials} className="mb-3">
+              <Button
+                onClick={createGuestCredentials}
+                className="mb-3"
+                disabled={isDisabled}
+              >
                 Submit
               </Button>
               {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
