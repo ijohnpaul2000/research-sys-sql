@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Form, Button, ButtonGroup } from "react-bootstrap";
 import ReactDom from "react-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -7,7 +7,7 @@ import { IconContext } from "react-icons";
 import axios from "axios";
 
 const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
-  const [key, setKey] = useState(tabKey); 
+  const [key, setKey] = useState(tabKey);
   const [yearLevel, setYearLevel] = useState("");
   const [section, setSection] = useState("");
 
@@ -24,13 +24,16 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
           <Button
             variant="danger"
             onClick={() => {
-              axios.delete(`http://localhost:3001/deleteYear/${cellValues.row.yearLevel_id}`)
-              .then(() => {
-                window.location.reload();
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+              axios
+                .delete(
+                  `http://192.168.254.100:3001/deleteYear/${cellValues.row.yearLevel_id}`
+                )
+                .then(() => {
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             }}
           >
             <IconContext.Provider value={{ color: "#fff" }}>
@@ -57,13 +60,16 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
           <Button
             variant="danger"
             onClick={() => {
-              axios.delete(`http://localhost:3001/deleteSec/${cellValues.row.section_id}`)
-              .then(() => {
-                window.location.reload();
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+              axios
+                .delete(
+                  `http://192.168.254.100:3001/deleteSec/${cellValues.row.section_id}`
+                )
+                .then(() => {
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             }}
           >
             <IconContext.Provider value={{ color: "#fff" }}>
@@ -79,7 +85,6 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
 
   //For reset form
   const resetForm = () => {
-    
     if (key === "yr") {
       document.getElementById("yr").reset();
     } else {
@@ -92,11 +97,12 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
       yearLevel: yearLevel,
     };
 
-    axios.request({
-      method: "post",
-      url: "http://localhost:3001/addyr",
-      data: data,
-    })
+    axios
+      .request({
+        method: "post",
+        url: "http://192.168.254.100:3001/addyr",
+        data: data,
+      })
       .then((data) => {
         console.log("Data was added");
       })
@@ -110,11 +116,12 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
       section: section,
     };
 
-    axios.request({
-      method: "post",
-      url: "http://localhost:3001/addsec",
-      data: data,
-    })
+    axios
+      .request({
+        method: "post",
+        url: "http://192.168.254.100:3001/addsec",
+        data: data,
+      })
       .then((data) => {
         console.log("Data was added");
       })

@@ -9,7 +9,7 @@ const Register = () => {
   console.log(role);
 
   const onFormSubmit = () => {
-    Axios.post("http://localhost:3001/register", {
+    Axios.post("http://192.168.254.100:3001/register", {
       username: username,
       password: password,
       role: role,

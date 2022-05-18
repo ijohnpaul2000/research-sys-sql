@@ -30,7 +30,7 @@ const Guest = () => {
 
   const guestLogin = () => {
     const cookies = new Cookies();
-    Axios.post("http://localhost:3001/guestLogin", {
+    Axios.post("http://192.168.254.100:3001/guestLogin", {
       guestUsername: guestUsername,
       guestPassword: guestPassword,
     }).then((response) => {

@@ -7,6 +7,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 var dayjs = require("dayjs");
+
 export let timeIn = "";
 const Landing = (props) => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Landing = (props) => {
   };
 
   // useEffect(() => {
-  //   Axios.get("http://localhost:3001/login").then((response) => {
+  //   Axios.get("http://192.168.254.100:3001/login").then((response) => {
   //     if (response.data.loggedIn === true) {
   //       setLoginStatus(response.data.user[0].username);
   //     }

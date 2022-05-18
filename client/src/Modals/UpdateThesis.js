@@ -114,7 +114,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
 
     Axios.request({
       method: "put",
-      url: "http://localhost:3001/update",
+      url: "http://192.168.254.100:3001/update",
       data: data,
     })
       .then((data) => {
@@ -184,12 +184,12 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
 
   //Retrieving Year Level/Sections
   useEffect(() => {
-    Axios.get("http://localhost:3001/sections").then((response) => {
+    Axios.get("http://192.168.254.100:3001/sections").then((response) => {
       // console.log(response);
       setSectionData(response.data);
     });
 
-    Axios.get("http://localhost:3001/yearlevel").then((response) => {
+    Axios.get("http://192.168.254.100:3001/yearlevel").then((response) => {
       // console.log(response);
       setYearLevelData(response.data);
     });

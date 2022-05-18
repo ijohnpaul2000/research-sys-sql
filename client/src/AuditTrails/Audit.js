@@ -28,13 +28,13 @@ const Audit = ({ permittedBy }) => {
     { field: "permittedBy", headerName: "Permitted By", width: 200, flex: 2 },
   ];
   useEffect(() => {
-    Axios.post("http://localhost:3001/viewAudits").then((response) => {
+    Axios.post("http://192.168.254.100:3001/viewAudits").then((response) => {
       console.log(JSON.stringify(response));
       setData(response.data);
     });
 
     //* Uncomment this function if you wanted to delete the audits after a (1) week.
-    // Axios.post("http://localhost:3001/deleteAudits").then((response) => {
+    // Axios.post("http://192.168.254.100:3001/deleteAudits").then((response) => {
     //   console.log(JSON.stringify(response));
     // })
   }, []);

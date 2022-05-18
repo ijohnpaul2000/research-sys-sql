@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const DeleteThesis = ({thesisTitle, thesisId}) => {
+const DeleteThesis = ({ thesisTitle, thesisId }) => {
   const [show, setShow] = useState(true);
 
   //Magic Rerenderer AHAHAHAAA
@@ -15,16 +15,14 @@ const DeleteThesis = ({thesisTitle, thesisId}) => {
 
   //Deletion
   const handleDelete = () => {
-    Axios.delete(`http://localhost:3001/deleteThesis/${thesisId}`)
+    Axios.delete(`http://192.168.254.100:3001/deleteThesis/${thesisId}`)
       .then(() => {
         handleClose();
       })
       .catch((error) => {
         console.log(error);
       });
-
-    
-  }
+  };
 
   return (
     <Modal
@@ -36,14 +34,20 @@ const DeleteThesis = ({thesisTitle, thesisId}) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Delete Data</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Delete Data
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Are you sure you want to delete <strong>{thesisTitle}</strong>??</p>
+        <p>
+          Are you sure you want to delete <strong>{thesisTitle}</strong>??
+        </p>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleClose}>Close</Button>
-        <Button variant="danger" onClick={handleDelete}>Delete</Button>
+        <Button variant="danger" onClick={handleDelete}>
+          Delete
+        </Button>
       </Modal.Footer>
     </Modal>
   );

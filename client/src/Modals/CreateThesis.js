@@ -104,7 +104,6 @@ const CreateThesis = () => {
     setKey("sec");
   };
 
-
   //Add Data to MySql
   const addThesisData = async () => {
     const data = {
@@ -131,7 +130,7 @@ const CreateThesis = () => {
 
     Axios.request({
       method: "post",
-      url: "http://localhost:3001/create",
+      url: "http://192.168.254.100:3001/create",
       data: data,
     })
       .then((data) => {
@@ -160,12 +159,12 @@ const CreateThesis = () => {
 
   //Retrieving Year Level/Sections
   useEffect(() => {
-    Axios.get("http://localhost:3001/sections").then((response) => {
+    Axios.get("http://192.168.254.100:3001/sections").then((response) => {
       // console.log(response);
       setSectionData(response.data);
     });
 
-    Axios.get("http://localhost:3001/yearlevel").then((response) => {
+    Axios.get("http://192.168.254.100:3001/yearlevel").then((response) => {
       // console.log(response);
       setYearLevelData(response.data);
     });
@@ -482,7 +481,7 @@ const CreateThesis = () => {
                         journal_name
                       );
                       reader.onload = () => {
-                        fetch("http://localhost:3001/create", {
+                        fetch("http://192.168.254.100:3001/create", {
                           method: "POST",
                           body: {
                             journal: setJournal(reader.result),
@@ -523,7 +522,7 @@ const CreateThesis = () => {
                         softcopy_name
                       );
                       reader.onload = () => {
-                        fetch("http://localhost:3001/create", {
+                        fetch("http://192.168.254.100:3001/create", {
                           method: "POST",
                           body: {
                             journal: setSoftcopy(reader.result),
@@ -552,7 +551,13 @@ const CreateThesis = () => {
           </Form>
         </Modal.Body>
         <Modal.Body className={!yearSection ? "hiddenEl" : "visibleEl"}>
-          {yearSection && <YearSection yearLevelData={yearLevelData} sectionData={sectionData} tabKey={key} />}
+          {yearSection && (
+            <YearSection
+              yearLevelData={yearLevelData}
+              sectionData={sectionData}
+              tabKey={key}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer className={!yearSection ? "hiddenEl" : "visibleEl"}>
           <Button

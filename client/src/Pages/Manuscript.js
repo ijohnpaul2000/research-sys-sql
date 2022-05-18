@@ -145,7 +145,7 @@ const Manuscript = () => {
 
   const logoutUser = () => {
     const cookies = new Cookies();
-    Axios.post("http://localhost:3001/addAudit", {
+    Axios.post("http://192.168.254.100:3001/addAudit", {
       accessedBy: username,
       timeIn: cookies.get("timeIn"),
       timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
@@ -159,7 +159,7 @@ const Manuscript = () => {
       );
     });
 
-    Axios.get("http://localhost:3001/logout").then((response) => {
+    Axios.get("http://192.168.254.100:3001/logout").then((response) => {
       setIsAuthenticated(false);
     });
     setTimeout(timeout, 1000);
@@ -168,7 +168,7 @@ const Manuscript = () => {
   };
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/login").then((response) => {
+    Axios.get("http://192.168.254.100:3001/login").then((response) => {
       console.log(response);
       if (response.data.loggedIn === true) {
         setIsAuthenticated(true);
@@ -178,12 +178,10 @@ const Manuscript = () => {
       } else {
       }
     });
-
-    console.log("this is the username", permittedBy);
   }, [role, isAuthenticated]);
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/manuscripts").then((response) => {
+    Axios.get("http://192.168.254.100:3001/manuscripts").then((response) => {
       // console.log(response);
       setThesisData(response.data);
     });
