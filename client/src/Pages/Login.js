@@ -32,7 +32,7 @@ const Landing = (props) => {
 
     console.log(cookies.get("timeIn")); // Pacman
 
-    Axios.post("http://localhost:3001/login", {
+    Axios.post("http://192.168.254.100:3001/login", {
       username: username,
       password: password,
     }).then((response) => {
