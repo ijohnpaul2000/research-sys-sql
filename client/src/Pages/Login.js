@@ -16,6 +16,8 @@ const Landing = (props) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  //* Button State
+  const [isDisabled, setIsDisabled] = useState(false);
   Axios.defaults.withCredentials = true;
   const timeout = () => {
     navigate("/manuscript");
@@ -38,6 +40,7 @@ const Landing = (props) => {
         setErrorMessage(response.data.message);
         setTimeout(clearErrorMessage, 2000);
       } else {
+        setIsDisabled(true);
         timeIn = dayjs().format("YYYY-MM-DD hh:mm:ss");
         setTimeout(timeout, 2000);
         setSuccessMessage("Success! Redirecting...");
@@ -107,7 +110,11 @@ const Landing = (props) => {
                   />
                 </Form.Group>
                 <div className="d-grid gap-2 d-flex justify-content-end">
-                  <Button type="Submit" className="landing-btns">
+                  <Button
+                    type="Submit"
+                    className="landing-btns"
+                    disabled={isDisabled}
+                  >
                     Log In
                   </Button>
                 </div>{" "}

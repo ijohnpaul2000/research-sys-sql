@@ -3,9 +3,10 @@ import NavigationBar from "../Components/NavigationBar";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/login.png";
+import Cookies from "universal-cookie";
 import Axios from "axios";
 var dayjs = require("dayjs");
-
+export let timeIn = "";
 const Guest = () => {
   let today = dayjs().format("YYYY-MM-DD hh:mm:ss");
   const [guestUsername, setGuestUsername] = useState("");
@@ -13,6 +14,10 @@ const Guest = () => {
   const [createdBy, setCreatedBy] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  //* Button State
+  const [isDisabled, setIsDisabled] = useState(false);
+  Axios.defaults.withCredentials = true;
 
   const timeout = () => {
     navigate("/manuscript");
@@ -24,6 +29,7 @@ const Guest = () => {
   let navigate = useNavigate();
 
   const guestLogin = () => {
+    const cookies = new Cookies();
     Axios.post("http://localhost:3001/guestLogin", {
       guestUsername: guestUsername,
       guestPassword: guestPassword,
@@ -40,8 +46,11 @@ const Guest = () => {
           setErrorMessage("This account is expired.");
           setTimeout(clearErrorMessage, 2000);
         } else {
+          timeIn = dayjs().format("YYYY-MM-DD hh:mm:ss");
+          setIsDisabled(true);
           setTimeout(timeout, 2000);
           setSuccessMessage("Success! Redirecting...");
+          cookies.set("timeIn", timeIn, { path: "/" });
         }
       }
     });
@@ -102,6 +111,7 @@ const Guest = () => {
                   variant="primary"
                   type="Submit"
                   className="landing-btns"
+                  disabled={isDisabled}
                 >
                   Log In
                 </Button>

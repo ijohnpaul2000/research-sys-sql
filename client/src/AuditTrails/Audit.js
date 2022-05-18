@@ -41,7 +41,13 @@ const Audit = ({ permittedBy }) => {
   return ReactDom.createPortal(
     <div>
       <Container fluid>
-        <Modal size="lg" show={show} keyboard={false} onHide={handleClose}>
+        <Modal
+          show={show}
+          size="lg"
+          dialogClassName="AuditModal"
+          keyboard={false}
+          onHide={handleClose}
+        >
           <Modal.Header closeButton></Modal.Header>
           <div style={{ height: "70vh", width: "100%" }}>
             <DataGrid

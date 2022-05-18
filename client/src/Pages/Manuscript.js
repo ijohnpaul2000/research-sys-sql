@@ -146,7 +146,7 @@ const Manuscript = () => {
   const logoutUser = () => {
     const cookies = new Cookies();
     Axios.post("http://localhost:3001/addAudit", {
-      accessedBy: role,
+      accessedBy: username,
       timeIn: cookies.get("timeIn"),
       timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
       deletedAt: dayjs(cookies.get("timeIn"))
@@ -179,7 +179,7 @@ const Manuscript = () => {
       }
     });
 
-    console.log(permittedBy);
+    console.log("this is the username", permittedBy);
   }, [role, isAuthenticated]);
 
   useEffect(() => {
@@ -309,7 +309,7 @@ const Manuscript = () => {
                         }}
                       >
                         Create Guest Credentials
-                        {showModal ? <CreateGuest createRole={role} /> : ""}
+                        {showModal ? <CreateGuest createRole={username} /> : ""}
                       </Dropdown.Item>
                       <Dropdown.Item
                         onClick={() => {
