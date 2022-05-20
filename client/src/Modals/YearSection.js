@@ -26,7 +26,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
             onClick={() => {
               axios
                 .delete(
-                  `http://192.168.254.100:3001/deleteYear/${cellValues.row.yearLevel_id}`
+                  `http://localhost:3001/deleteYear/${cellValues.row.yearLevel_id}`
                 )
                 .then(() => {
                   window.location.reload();
@@ -62,7 +62,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
             onClick={() => {
               axios
                 .delete(
-                  `http://192.168.254.100:3001/deleteSec/${cellValues.row.section_id}`
+                  `http://localhost:3001/deleteSec/${cellValues.row.section_id}`
                 )
                 .then(() => {
                   window.location.reload();
@@ -100,7 +100,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
     axios
       .request({
         method: "post",
-        url: "http://192.168.254.100:3001/addyr",
+        url: "http://localhost:3001/addyr",
         data: data,
       })
       .then((data) => {
@@ -119,7 +119,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
     axios
       .request({
         method: "post",
-        url: "http://192.168.254.100:3001/addsec",
+        url: "http://localhost:3001/addsec",
         data: data,
       })
       .then((data) => {

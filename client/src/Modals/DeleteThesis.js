@@ -15,7 +15,7 @@ const DeleteThesis = ({ thesisTitle, thesisId }) => {
 
   //Deletion
   const handleDelete = () => {
-    Axios.delete(`http://192.168.254.100:3001/deleteThesis/${thesisId}`)
+    Axios.delete(`http://localhost:3001/deleteThesis/${thesisId}`)
       .then(() => {
         handleClose();
       })

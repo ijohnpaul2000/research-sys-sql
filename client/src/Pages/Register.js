@@ -1,27 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form, FormText } from "react-bootstrap";
 import Axios from "axios";
+var randomString = require("random-string");
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Chairperson");
+  const [message, setMessage] = useState("");
   console.log(role);
 
   const onFormSubmit = () => {
-    Axios.post("http://192.168.254.100:3001/register", {
+    const secret_id = randomString({
+      length: 15,
+      numeric: true,
+      letters: true,
+      special: true,
+    });
+
+    Axios.post("http://localhost:3001/register", {
       username: username,
       password: password,
       role: role,
+      secret_id: secret_id,
     }).then((response) => {
       console.log(JSON.stringify(response));
+      setMessage(response.data.message);
     });
   };
 
   return (
     <Container fluid className="register">
       <div className="register__container shadow">
-        <h1 className="register__header">Create Guest Credentials</h1>
+        <h1 className="register__header">Create Account</h1>
 
         <Form
           onSubmit={(e) => {
@@ -59,6 +70,9 @@ const Register = () => {
               <option>Chairperson</option>
               <option>Encoder</option>
             </Form.Select>
+          </Form.Group>
+          <Form.Group className="my-4">
+            <Form.Text>{message}</Form.Text>
           </Form.Group>
           <Button type="submit" className="register__button">
             Register

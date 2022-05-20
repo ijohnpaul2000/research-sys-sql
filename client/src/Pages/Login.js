@@ -30,9 +30,9 @@ const Landing = (props) => {
   const login = () => {
     const cookies = new Cookies();
 
-    console.log(cookies.get("timeIn")); // Pacman
+    console.log(cookies.get("timeIn"));
 
-    Axios.post("http://192.168.254.100:3001/login", {
+    Axios.post("http://localhost:3001/login", {
       username: username,
       password: password,
     }).then((response) => {
@@ -52,7 +52,7 @@ const Landing = (props) => {
   };
 
   // useEffect(() => {
-  //   Axios.get("http://192.168.254.100:3001/login").then((response) => {
+  //   Axios.get("http://localhost:3001/login").then((response) => {
   //     if (response.data.loggedIn === true) {
   //       setLoginStatus(response.data.user[0].username);
   //     }
@@ -118,7 +118,7 @@ const Landing = (props) => {
                   >
                     Log In
                   </Button>
-                </div>{" "}
+                </div>
               </Form>
               <div className="line-container">
                 <span className="or-txt">or</span>

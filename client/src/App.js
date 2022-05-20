@@ -6,6 +6,7 @@ import Manuscript from "./Pages/Manuscript";
 import Landing from "./Pages/Landing";
 import Register from "./Pages/Register";
 import ImportPDF from "./Components/ImportPDF";
+import Forgot_Password from "./Pages/Forgot_Password";
 function App() {
   return (
     <div className="app-container">
@@ -17,6 +18,7 @@ function App() {
           <Route path="/manuscript" element={<Manuscript />} />
           <Route path="/view" element={<ImportPDF />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<Forgot_Password />} />
         </Routes>
       </BrowserRouter>
     </div>

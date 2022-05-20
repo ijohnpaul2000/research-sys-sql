@@ -30,7 +30,7 @@ const Guest = () => {
 
   const guestLogin = () => {
     const cookies = new Cookies();
-    Axios.post("http://192.168.254.100:3001/guestLogin", {
+    Axios.post("http://localhost:3001/guestLogin", {
       guestUsername: guestUsername,
       guestPassword: guestPassword,
     }).then((response) => {
@@ -69,13 +69,13 @@ const Guest = () => {
             <h2 className="login">Guest Login</h2>
             <p className="sub_title text-start">
               Before you can have an official guest access to CEIT Manuscript
-              Information System, you may request and get the{" "}
-              <strong>Email & Password</strong> from the <strong>dean</strong>{" "}
+              Information System, you may request and get the
+              <strong>Email & Password</strong> from the <strong>dean</strong>
               or <strong>chairperson</strong> of the CEIT Department.
             </p>
             <p className="sub_title text-start">
               Once you already have the <strong>credentials</strong> from the
-              Dean or Chairperson of the CEIT Department, please enter the{" "}
+              Dean or Chairperson of the CEIT Department, please enter the
               <strong>credentials</strong> below.
             </p>
             {successMessage && (
@@ -115,7 +115,7 @@ const Guest = () => {
                 >
                   Log In
                 </Button>
-              </div>{" "}
+              </div>
             </Form>
           </Col>
           <Col

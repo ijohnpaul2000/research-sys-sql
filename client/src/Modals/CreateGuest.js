@@ -52,7 +52,7 @@ const CreateGuest = ({ createRole }) => {
 
   const createGuestCredentials = () => {
     if (guestUsername.length > 10 && guestPassword.length > 10) {
-      Axios.post("http://192.168.254.100:3001/createCredentials", {
+      Axios.post("http://localhost:3001/createCredentials", {
         guestUsername: guestUsername,
         guestPassword: guestPassword,
         createdAt: createdAt,
@@ -136,7 +136,7 @@ const CreateGuest = ({ createRole }) => {
               )}
             </Form>
           </Col>
-        </Modal>{" "}
+        </Modal>
       </Container>
     </div>,
     document.getElementById("modal-root")

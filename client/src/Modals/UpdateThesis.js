@@ -15,7 +15,7 @@ import Axios from "axios";
 import ImportPDF from "../Components/ImportPDF";
 import "../sass/modals/_updatethesis.scss";
 
-const UpdateThesis = ({ thesisId, singleThesis }) => {
+const UpdateThesis = ({ thesisId, singleThesis, role }) => {
   const navigate = useNavigate();
   //Use States for Modal
   const [show, setShow] = useState(true);
@@ -114,7 +114,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
 
     Axios.request({
       method: "put",
-      url: "http://192.168.254.100:3001/update",
+      url: "http://localhost:3001/update",
       data: data,
     })
       .then((data) => {
@@ -184,12 +184,12 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
 
   //Retrieving Year Level/Sections
   useEffect(() => {
-    Axios.get("http://192.168.254.100:3001/sections").then((response) => {
+    Axios.get("http://localhost:3001/sections").then((response) => {
       // console.log(response);
       setSectionData(response.data);
     });
 
-    Axios.get("http://192.168.254.100:3001/yearlevel").then((response) => {
+    Axios.get("http://localhost:3001/yearlevel").then((response) => {
       // console.log(response);
       setYearLevelData(response.data);
     });
@@ -260,7 +260,6 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
             <fieldset disabled={!checked}>
               <Row>
                 <Col md={7} sm={12}>
-                  {" "}
                   <Form.Group as={Col} controlId="formGridTitle">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
@@ -365,7 +364,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                           value={panelists}
                         />
                         <Form.Control.Feedback type="invalid">
-                          Please enter atleast 1 panel.{" "}
+                          Please enter atleast 1 panel.
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
@@ -404,7 +403,6 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                       </Form.Group>
                     </Col>
                     <Col>
-                      {" "}
                       <Form.Group as={Col} controlId="formGridCity">
                         <Form.Label>Grades</Form.Label>
                         <Form.Control
@@ -435,7 +433,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                     <Form.Control.Feedback type="invalid">
                       Please enter a Keyword.
                     </Form.Control.Feedback>
-                  </Form.Group>{" "}
+                  </Form.Group>
                   <Row>
                     <Col>
                       <Form.Group as={Col} controlId="formGridCity">
@@ -467,7 +465,7 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                  </Row>{" "}
+                  </Row>
                   <Row>
                     <Col>
                       <Form.Group as={Col} controlId="formGridCity">
@@ -515,27 +513,31 @@ const UpdateThesis = ({ thesisId, singleThesis }) => {
               </Row>
             </fieldset>
             <Row className="mt-3">
-              <Col>
-                <ButtonGroup>
-                  <ToggleButton
-                    id="toggle-check"
-                    type="checkbox"
-                    variant={checked ? "danger" : "primary"}
-                    checked={checked}
-                    value="1"
-                    onChange={(e) => setChecked(e.currentTarget.checked)}
-                  >
-                    {checked ? "Cancel Editing" : "Edit"}
-                  </ToggleButton>
-                  <Button
-                    type="Submit"
-                    variant="success"
-                    className={checked ? "visibleEl" : "hiddenEl"}
-                  >
-                    Save Changes
-                  </Button>
-                </ButtonGroup>
-              </Col>
+              {role === "Dean" || role === "Encoder" ? (
+                <Col>
+                  <ButtonGroup>
+                    <ToggleButton
+                      id="toggle-check"
+                      type="checkbox"
+                      variant={checked ? "danger" : "primary"}
+                      checked={checked}
+                      value="1"
+                      onChange={(e) => setChecked(e.currentTarget.checked)}
+                    >
+                      {checked ? "Cancel Editing" : "Edit"}
+                    </ToggleButton>
+                    <Button
+                      type="Submit"
+                      variant="success"
+                      className={checked ? "visibleEl" : "hiddenEl"}
+                    >
+                      Save Changes
+                    </Button>
+                  </ButtonGroup>
+                </Col>
+              ) : (
+                ""
+              )}
               <Col className="d-flex flex-row-reverse">
                 <Button
                   variant="danger"

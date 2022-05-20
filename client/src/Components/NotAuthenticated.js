@@ -12,7 +12,7 @@ const NotAuthenticated = () => {
           <Link to="/" className="link_homepage">
             Back to homepage
           </Link>
-        </div>{" "}
+        </div>
       </div>
     </>
   );

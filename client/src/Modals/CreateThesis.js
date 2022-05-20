@@ -130,7 +130,7 @@ const CreateThesis = () => {
 
     Axios.request({
       method: "post",
-      url: "http://192.168.254.100:3001/create",
+      url: "http://localhost:3001/create",
       data: data,
     })
       .then((data) => {
@@ -159,12 +159,12 @@ const CreateThesis = () => {
 
   //Retrieving Year Level/Sections
   useEffect(() => {
-    Axios.get("http://192.168.254.100:3001/sections").then((response) => {
+    Axios.get("http://localhost:3001/sections").then((response) => {
       // console.log(response);
       setSectionData(response.data);
     });
 
-    Axios.get("http://192.168.254.100:3001/yearlevel").then((response) => {
+    Axios.get("http://localhost:3001/yearlevel").then((response) => {
       // console.log(response);
       setYearLevelData(response.data);
     });
@@ -206,7 +206,6 @@ const CreateThesis = () => {
           >
             <Row>
               <Col md={7} sm={12}>
-                {" "}
                 <Form.Group as={Col} className="mb-3" controlId="formGridTitle">
                   <Form.Label>Title</Form.Label>
                   <Form.Control
@@ -283,7 +282,7 @@ const CreateThesis = () => {
                         </Button>
                       </Form.Text>
                     </Form.Group>
-                  </Col>{" "}
+                  </Col>
                   <Col>
                     <Form.Group as={Col} controlId="formGridStatePub">
                       <Form.Label>Year Published</Form.Label>
@@ -368,7 +367,6 @@ const CreateThesis = () => {
                     </Form.Group>
                   </Col>
                   <Col>
-                    {" "}
                     <Form.Group as={Col} controlId="formGridGr">
                       <Form.Label>Grades</Form.Label>
                       <Form.Control
@@ -397,7 +395,7 @@ const CreateThesis = () => {
                   <Form.Control.Feedback type="invalid">
                     Please enter a Keyword.
                   </Form.Control.Feedback>
-                </Form.Group>{" "}
+                </Form.Group>
                 <Row className="mb-3">
                   <Col>
                     <Form.Group as={Col} controlId="formGridAdv">
@@ -427,7 +425,7 @@ const CreateThesis = () => {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                </Row>{" "}
+                </Row>
                 <Row>
                   <Col>
                     <Form.Group controlId="formGridDean">
@@ -481,7 +479,7 @@ const CreateThesis = () => {
                         journal_name
                       );
                       reader.onload = () => {
-                        fetch("http://192.168.254.100:3001/create", {
+                        fetch("http://localhost:3001/create", {
                           method: "POST",
                           body: {
                             journal: setJournal(reader.result),
@@ -522,7 +520,7 @@ const CreateThesis = () => {
                         softcopy_name
                       );
                       reader.onload = () => {
-                        fetch("http://192.168.254.100:3001/create", {
+                        fetch("http://localhost:3001/create", {
                           method: "POST",
                           body: {
                             journal: setSoftcopy(reader.result),

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "random-string": "^0.2.0"
+  }
+}

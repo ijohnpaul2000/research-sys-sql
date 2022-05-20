@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+require("dotenv").config();
+
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -14,8 +16,8 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://192.168.254.100:3000",
-    // origin: "http://localhost:3000",
+    //origin: "http://192.168.254.100:3000",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     optionSuccessStatus: 200,
@@ -51,6 +53,7 @@ app.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const role = req.body.role;
+  const secret_id = req.body.secret_id;
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
@@ -58,16 +61,50 @@ app.post("/register", (req, res) => {
     }
 
     db.query(
-      "INSERT INTO tbl_users (username, password,role) VALUES (?,?,?)",
-      [username, hash, role],
+      "INSERT INTO tbl_users (username, password,role,secret_id) VALUES (?,?,?,?)",
+      [username, hash, role, secret_id],
       (err, result) => {
         if (result) {
-          res.send(result);
+          console.log(result);
+          res.send({ message: "Registration successful!" });
         } else {
-          res.send({ message: "This data is existing and may be expired." });
+          res.send({ message: "Username exists." });
         }
       }
     );
+  });
+});
+
+app.post("/forgot", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const secret_id = req.body.secret_id;
+
+  const query =
+    "UPDATE tbl_users SET password = ? where username = ? and  secret_id = ?  ";
+
+  // db.query(query, [password, username, secret_id], (err, result) => {
+  //   if (result.message === "(Rows matched: 0  Changed: 0  Warnings: 0") {
+  //     res.send({ message: "No Users Found!" });
+  //   } else {
+  //     res.send({ message: "Done!" });
+  //     console.log(result);
+  //   }
+  // });
+
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
+      console.log(err);
+    }
+
+    db.query(query, [hash, username, secret_id], (err, result) => {
+      if (result.message === "(Rows matched: 0  Changed: 0  Warnings: 0") {
+        res.send({ message: "No Users Found!" });
+      } else {
+        res.send({ message: "Password changed successfully!" });
+        console.log(result);
+      }
+    });
   });
 });
 

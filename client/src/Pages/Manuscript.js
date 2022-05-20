@@ -145,7 +145,7 @@ const Manuscript = () => {
 
   const logoutUser = () => {
     const cookies = new Cookies();
-    Axios.post("http://192.168.254.100:3001/addAudit", {
+    Axios.post("http://localhost:3001/addAudit", {
       accessedBy: username,
       timeIn: cookies.get("timeIn"),
       timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
@@ -159,7 +159,7 @@ const Manuscript = () => {
       );
     });
 
-    Axios.get("http://192.168.254.100:3001/logout").then((response) => {
+    Axios.get("http://localhost:3001/logout").then((response) => {
       setIsAuthenticated(false);
     });
     setTimeout(timeout, 1000);
@@ -168,7 +168,7 @@ const Manuscript = () => {
   };
 
   useEffect(() => {
-    Axios.get("http://192.168.254.100:3001/login").then((response) => {
+    Axios.get("http://localhost:3001/login").then((response) => {
       console.log(response);
       if (response.data.loggedIn === true) {
         setIsAuthenticated(true);
@@ -178,10 +178,10 @@ const Manuscript = () => {
       } else {
       }
     });
-  }, [role, isAuthenticated]);
+  }, []);
 
   useEffect(() => {
-    Axios.get("http://192.168.254.100:3001/manuscripts").then((response) => {
+    Axios.get("http://localhost:3001/manuscripts").then((response) => {
       // console.log(response);
       setThesisData(response.data);
     });
@@ -245,37 +245,43 @@ const Manuscript = () => {
       {isAuthenticated ? (
         <>
           <Stack direction="row" spacing={1} className="m-2">
-            <Chip
-              avatar={
-                <Avatar
-                  alt={role}
-                  src={
-                    "https://avatars.dicebear.com/api/jdenticon/" +
-                    Math.random() +
-                    ".svg"
+            <Row>
+              <Col lg={12} className="m--2">
+                <Chip
+                  className="m-2"
+                  avatar={
+                    <Avatar
+                      alt={role}
+                      src={
+                        "https://avatars.dicebear.com/api/jdenticon/" +
+                        Math.random() +
+                        ".svg"
+                      }
+                    />
                   }
+                  label={"Currenly Signed in as " + username}
                 />
-              }
-              label={"Currenly Signed in as " + username}
-            />
-            <Chip
-              avatar={
-                <Avatar
-                  alt={role}
-                  src={
-                    "https://avatars.dicebear.com/api/jdenticon/" +
-                    Math.random() +
-                    ".svg"
+                <Chip
+                  className="m-2"
+                  avatar={
+                    <Avatar
+                      alt={role}
+                      src={
+                        "https://avatars.dicebear.com/api/jdenticon/" +
+                        Math.random() +
+                        ".svg"
+                      }
+                    />
                   }
+                  label={"User Type: " + role}
                 />
-              }
-              label={"User Type: " + role}
-            />{" "}
-            <Chip
-              className={role === "Guest" ? "visibleEl" : "hiddenEl"}
-              label={"Permitted by: " + permittedBy}
-              variant="outlined"
-            />
+                <Chip
+                  className={role === "Guest" ? "visibleEl m-2" : "hiddenEl"}
+                  label={"Permitted by: " + permittedBy}
+                  variant="outlined"
+                />
+              </Col>
+            </Row>
           </Stack>
           <Container fluid="md" className="manuscript_container p">
             <Row>
@@ -283,7 +289,7 @@ const Manuscript = () => {
             </Row>
             <Row>
               <Col className="d-flex justify-content-end align-items-center py-4">
-                {role !== "Guest" && (
+                {role === "Encoder" || role === "Dean" ? (
                   <Button
                     className="mx-4"
                     onClick={() => {
@@ -294,12 +300,14 @@ const Manuscript = () => {
                     Add Thesis
                     {showAddModal && <CreateThesis />}
                   </Button>
+                ) : (
+                  ""
                 )}
 
                 <DropdownButton id="dropdown-basic-button" title="Settings">
                   <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
 
-                  {role !== "Guest" && (
+                  {role === "Dean" || role === "Chairperson" ? (
                     <>
                       <Dropdown.Item
                         onClick={() => {
@@ -318,6 +326,8 @@ const Manuscript = () => {
                         {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
                       </Dropdown.Item>
                     </>
+                  ) : (
+                    ""
                   )}
                 </DropdownButton>
               </Col>
@@ -330,12 +340,14 @@ const Manuscript = () => {
               getRowId={(row) => row.thesis_id}
               pageSize={10}
               rowsPerPageOptions={[10]}
-              components={{ Toolbar: GridToolbar }}
+              //* The toolbar will be hidden when the system is accessed by the guests.
+              components={{ Toolbar: role !== "Guest" ? GridToolbar : null }}
               componentsProps={{
                 toolbar: {
                   csvOptions: {
                     fields: [
                       "title",
+                      "abstract",
                       "authors",
                       "adviser",
                       "course",
@@ -348,14 +360,8 @@ const Manuscript = () => {
                   printOptions: {
                     hideFooter: true,
                     hideToolbar: true,
-                    fields: [
-                      "title",
-                      "authors",
-                      "adviser",
-                      "course",
-                      "yearLevel",
-                      "section",
-                    ],
+                    //* Fields are only set to title since the masterlist are only (?) composed of title field.
+                    fields: ["title"],
                   },
                 },
               }}
@@ -371,7 +377,11 @@ const Manuscript = () => {
             />
           </div>
           {showEditModal && (
-            <UpdateThesis singleThesis={singleThesis} thesisId={thesisId} />
+            <UpdateThesis
+              singleThesis={singleThesis}
+              thesisId={thesisId}
+              role={role}
+            />
           )}
           {showDeleteModal && (
             <DeleteThesis thesisTitle={title} thesisId={thesisId} />
