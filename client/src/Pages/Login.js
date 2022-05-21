@@ -18,7 +18,7 @@ const Landing = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   //* Button State
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   Axios.defaults.withCredentials = true;
   const timeout = () => {
     navigate("/manuscript");
@@ -41,7 +41,6 @@ const Landing = (props) => {
         setErrorMessage(response.data.message);
         setTimeout(clearErrorMessage, 2000);
       } else {
-        setIsDisabled(true);
         timeIn = dayjs().format("YYYY-MM-DD hh:mm:ss");
         setTimeout(timeout, 2000);
         setSuccessMessage("Success! Redirecting...");
@@ -51,13 +50,11 @@ const Landing = (props) => {
     });
   };
 
-  // useEffect(() => {
-  //   Axios.get("http://localhost:3001/login").then((response) => {
-  //     if (response.data.loggedIn === true) {
-  //       setLoginStatus(response.data.user[0].username);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (username.length !== 0 && password.length !== 0) {
+      setIsDisabled(false);
+    }
+  }, [username, password]);
 
   return (
     <>
@@ -95,6 +92,7 @@ const Landing = (props) => {
                     autoComplete="on"
                     onChange={(e) => {
                       setUsername(e.target.value);
+                      console.log(username);
                     }}
                   />
                 </Form.Group>
@@ -107,10 +105,12 @@ const Landing = (props) => {
                     autoComplete="on"
                     onChange={(e) => {
                       setPassword(e.target.value);
+                      console.log(password);
                     }}
                   />
                 </Form.Group>
-                <div className="d-grid gap-2 d-flex justify-content-end">
+                <div className="d-grid gap-2 d-flex justify-content-between align-items-center">
+                  <Link to="/forgot">forgot password?</Link>
                   <Button
                     type="Submit"
                     className="landing-btns"

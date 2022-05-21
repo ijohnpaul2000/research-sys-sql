@@ -435,10 +435,11 @@ app.post("/addsec", (req, res) => {
 
   db.query(sql, [section], (err, result) => {
     if (err) {
-      console.log(err);
+      if (err.code === "ER_DUP_ENTRY") {
+        res.send({ message: "Already exists." });
+      }
     } else {
-      console.log(result);
-      res.send("New Value Inserted");
+      res.send({ message: "Successful!" });
     }
   });
 });
@@ -479,10 +480,11 @@ app.post("/addyr", (req, res) => {
 
   db.query(sql, [yearLevel], (err, result) => {
     if (err) {
-      console.log(err);
+      if (err.code === "ER_DUP_ENTRY") {
+        res.send({ message: "Already exists." });
+      }
     } else {
-      console.log(result);
-      res.send("New Value Inserted");
+      res.send({ message: "Successful!" });
     }
   });
 });

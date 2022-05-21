@@ -28,6 +28,7 @@ const DeleteThesis = ({ thesisTitle, thesisId }) => {
     <Modal
       show={show}
       keyboard={false}
+      backdrop="static"
       onHide={handleClose}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"

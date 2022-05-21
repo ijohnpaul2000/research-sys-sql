@@ -86,7 +86,12 @@ const CreateGuest = ({ createRole }) => {
   return ReactDom.createPortal(
     <div>
       <Container fluid>
-        <Modal show={show} keyboard={false} onHide={handleClose}>
+        <Modal
+          show={show}
+          backdrop="static"
+          keyboard={false}
+          onHide={handleClose}
+        >
           <Modal.Header closeButton></Modal.Header>
 
           <Col

@@ -42,6 +42,7 @@ const Audit = ({ permittedBy }) => {
     <div>
       <Container fluid>
         <Modal
+          backdrop="static"
           show={show}
           size="lg"
           dialogClassName="AuditModal"

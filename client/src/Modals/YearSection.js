@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Tab, Form, Button, ButtonGroup } from "react-bootstrap";
+import { Tabs, Tab, Form, Button, ButtonGroup, Alert } from "react-bootstrap";
 import ReactDom from "react-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { BsTrash } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
   const [key, setKey] = useState(tabKey);
   const [yearLevel, setYearLevel] = useState("");
   const [section, setSection] = useState("");
+
+  //messages
+  const [message, setMessage] = useState("");
 
   const columnsYearLevel = [
     { field: "yearLevel", headerName: "Year Level", width: 200, flex: 2 },
@@ -29,7 +34,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
                   `http://localhost:3001/deleteYear/${cellValues.row.yearLevel_id}`
                 )
                 .then(() => {
-                  window.location.reload();
+                  // window.location.reload();
                 })
                 .catch((error) => {
                   console.log(error);
@@ -65,7 +70,7 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
                   `http://localhost:3001/deleteSec/${cellValues.row.section_id}`
                 )
                 .then(() => {
-                  window.location.reload();
+                  // window.location.reload();
                 })
                 .catch((error) => {
                   console.log(error);
@@ -91,7 +96,9 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
       document.getElementById("sec").reset();
     }
   };
-
+  const clearErrorMessage = () => {
+    setMessage("");
+  };
   const addYearLevel = async () => {
     const data = {
       yearLevel: yearLevel,
@@ -103,12 +110,16 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
         url: "http://localhost:3001/addyr",
         data: data,
       })
-      .then((data) => {
-        console.log("Data was added");
+      .then((response) => {
+        if (response.data.message) {
+          console.log("The message is: ", response.data.message);
+          setMessage(response.data.message);
+        }
       })
       .catch((error) => {
         console.log("Error in Adding Year Level");
       });
+    setTimeout(clearErrorMessage, 2000);
   };
 
   const addSection = async () => {
@@ -122,12 +133,17 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
         url: "http://localhost:3001/addsec",
         data: data,
       })
-      .then((data) => {
-        console.log("Data was added");
+      .then((response) => {
+        if (response.data.message) {
+          console.log("The message is: ", response.data.message);
+          setMessage(response.data.message);
+        }
       })
       .catch((error) => {
+        console.log(error);
         console.log("Error in Adding Section");
       });
+    setTimeout(clearErrorMessage, 2000);
   };
 
   //Submit Function
@@ -139,9 +155,11 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
     } else {
       addSection();
     }
-
     resetForm();
   };
+  useEffect(() => {
+    console.log("rerender.");
+  }, [yearLevelData, sectionData]);
 
   return (
     <div>
@@ -162,6 +180,16 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
                 onChange={(e) => setYearLevel(e.target.value)}
                 required
               />
+              {message === "Already exists." && (
+                <Alert variant="danger" className="my-3">
+                  {message}
+                </Alert>
+              )}{" "}
+              {message === "Successful!" && (
+                <Alert variant="success" className="my-3">
+                  {message}
+                </Alert>
+              )}
             </Form.Group>
 
             <Button variant="primary" type="submit">
@@ -187,12 +215,21 @@ const YearSection = ({ yearLevelData, sectionData, tabKey }) => {
                 placeholder="Enter new section"
                 onChange={(e) => setSection(e.target.value)}
                 required
-              />
+              />{" "}
+              {message === "Already exists." && (
+                <Alert variant="danger" className="my-3">
+                  {message}
+                </Alert>
+              )}{" "}
+              {message === "Successful!" && (
+                <Alert variant="success" className="my-3">
+                  {message}
+                </Alert>
+              )}
             </Form.Group>
-
             <Button variant="primary" type="submit">
               Add
-            </Button>
+            </Button>{" "}
           </Form>
 
           <DataGrid

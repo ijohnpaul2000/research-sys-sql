@@ -16,7 +16,7 @@ const Guest = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   //* Button State
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   Axios.defaults.withCredentials = true;
 
   const timeout = () => {
@@ -55,6 +55,11 @@ const Guest = () => {
       }
     });
   };
+  useEffect(() => {
+    if (guestUsername.length !== 0 && guestPassword.length !== 0) {
+      setIsDisabled(false);
+    }
+  }, [guestUsername, guestPassword]);
 
   return (
     <>
@@ -69,14 +74,15 @@ const Guest = () => {
             <h2 className="login">Guest Login</h2>
             <p className="sub_title text-start">
               Before you can have an official guest access to CEIT Manuscript
-              Information System, you may request and get the
-              <strong>Email & Password</strong> from the <strong>dean</strong>
+              Information System, you may request and get the{" "}
+              <strong>Email & Password </strong> from the{" "}
+              <strong> dean </strong>
               or <strong>chairperson</strong> of the CEIT Department.
             </p>
             <p className="sub_title text-start">
               Once you already have the <strong>credentials</strong> from the
               Dean or Chairperson of the CEIT Department, please enter the
-              <strong>credentials</strong> below.
+              <strong> credentials </strong> below.
             </p>
             {successMessage && (
               <Alert variant="success">{successMessage}</Alert>

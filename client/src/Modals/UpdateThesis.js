@@ -241,6 +241,7 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
         />
       </div>
       <Modal
+        backdrop="static"
         show={show}
         keyboard={false}
         onHide={handleClose}

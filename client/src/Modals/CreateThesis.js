@@ -187,6 +187,7 @@ const CreateThesis = () => {
       </div>
       <Modal
         show={show}
+        backdrop="static"
         keyboard={false}
         onHide={handleClose}
         size="lg"
@@ -461,7 +462,7 @@ const CreateThesis = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group>
+                {/* <Form.Group>
                   <Form.Label>For Journal</Form.Label>
                   <Form.Control
                     type="file"
@@ -539,7 +540,7 @@ const CreateThesis = () => {
                       };
                     }}
                   />
-                </Form.Group>
+                </Form.Group> */}
               </Col>
             </Row>
 
