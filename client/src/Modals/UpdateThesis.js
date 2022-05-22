@@ -469,7 +469,7 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
                   </Row>
                   <Row>
                     <Col>
-                      <Form.Group as={Col} controlId="formGridCity">
+                      <Form.Group controlId="formGridCity">
                         <Form.Label>Dean</Form.Label>
                         <Form.Control
                           type="text"
@@ -483,7 +483,6 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
-                    <Col></Col>
                   </Row>
                 </Col>
                 <Col md={5} className="h-auto">

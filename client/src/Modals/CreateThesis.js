@@ -17,9 +17,9 @@ import "../sass/modals/_createthesis.scss";
 import YearSection from "./YearSection";
 import axios from "axios";
 
-const CreateThesis = () => {
+const CreateThesis = ({show, toggleShow}) => {
   //Use States for Modal
-  const [show, setShow] = useState(true);
+  // const [show, setShow] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [yearSection, setYearSection] = useState(false);
@@ -84,10 +84,15 @@ const CreateThesis = () => {
       progress: undefined,
     });
 
+  // const handleClose = () => {
+  //   setShow(!show);
+  //   childToParent(!show)
+  //   //window.location.reload();
+  // };
+
   const handleClose = () => {
-    setShow(!show);
-    window.location.reload();
-  };
+    show = false;
+  }
 
   //For reset form
   const resetForm = () => {
@@ -121,11 +126,7 @@ const CreateThesis = () => {
       adviser: adviser,
       chairperson: chairperson,
       dean: dean,
-      abstract: abstract,
-      journal: journal,
-      journal_name: journal_name,
-      softcopy: softcopy,
-      softcopy_name: softcopy_name,
+      abstract: abstract
     };
 
     Axios.request({
@@ -168,6 +169,12 @@ const CreateThesis = () => {
       // console.log(response);
       setYearLevelData(response.data);
     });
+
+     //Source: https://stackoverflow.com/a/65007703/13848366
+     return () => {
+      setSectionData({}); // This not worked for me (Check mo na lng boss)
+      setYearLevelData({});
+    };
   }, []);
 
   return ReactDom.createPortal(
@@ -189,7 +196,7 @@ const CreateThesis = () => {
         show={show}
         backdrop="static"
         keyboard={false}
-        onHide={handleClose}
+        onHide={toggleShow}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered

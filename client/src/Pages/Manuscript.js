@@ -34,6 +34,7 @@ var dayjs = require("dayjs");
 const Manuscript = () => {
   let navigate = useNavigate();
   //Modal States
+  const [show, setShow] = useState(false)
   const [showModal, setShowModal] = useState(false);
   const [showAudits, setShowAudits] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -59,6 +60,8 @@ const Manuscript = () => {
   const [singleThesis, setSingleThesis] = useState([]);
 
   const [title, setTitle] = useState("");
+
+  const toggleShow = () => setShow(p => !p);
 
   const columns = [
     { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
@@ -100,9 +103,7 @@ const Manuscript = () => {
                   cellValues.row.chairperson,
                   cellValues.row.dean,
                   cellValues.row.abstract,
-                  cellValues.row.yearPublished,
-                  cellValues.row.journal,
-                  cellValues.row.journal_name
+                  cellValues.row.yearPublished
                 );
               }}
             >
@@ -185,7 +186,7 @@ const Manuscript = () => {
       // console.log(response);
       setThesisData(response.data);
     });
-  }, []);
+  }, [thesisData]);
 
   //Open View Info Modal
   const openViewInfo = (
@@ -204,9 +205,7 @@ const Manuscript = () => {
     chairperson,
     dean,
     abstract,
-    year,
-    journal,
-    journal_name
+    year
   ) => {
     setThesisId(id);
 
@@ -226,9 +225,7 @@ const Manuscript = () => {
       chairperson,
       dean,
       abstract,
-      year,
-      journal,
-      journal_name,
+      year
     };
     setSingleThesis(data);
     setShowEditModal(true);
@@ -292,13 +289,10 @@ const Manuscript = () => {
                 {role === "Encoder" || role === "Dean" ? (
                   <Button
                     className="mx-4"
-                    onClick={() => {
-                      setShowAddModal(true);
-                      console.log("Add Modal Open");
-                    }}
+                    onClick={toggleShow}
                   >
                     Add Thesis
-                    {showAddModal && <CreateThesis />}
+                    
                   </Button>
                 ) : (
                   ""
@@ -386,6 +380,7 @@ const Manuscript = () => {
           {showDeleteModal && (
             <DeleteThesis thesisTitle={title} thesisId={thesisId} />
           )}
+          {show && (<CreateThesis show={show} toggleShow={toggleShow}/>)}
         </>
       ) : (
         <NotAuthenticated />
