@@ -293,7 +293,6 @@ const Manuscript = () => {
                   onClick={() => {
                     openCreateUserModal();
                   }}
-                  className="mx-4"
                 >
                   Create a User
                 </Button>
@@ -336,7 +335,7 @@ const Manuscript = () => {
               </Col>
             </Row>
           </Container>
-          <div style={{ height: 400, width: "100%", padding: "40px" }}>
+          <div style={{ height: 600, width: "100%", padding: "40px" }}>
             <DataGrid
               rows={thesisData}
               columns={columns}
