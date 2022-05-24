@@ -17,7 +17,7 @@ import "../sass/modals/_createthesis.scss";
 import YearSection from "./YearSection";
 import axios from "axios";
 
-const CreateThesis = ({show, toggleShow}) => {
+const CreateThesis = ({ show, toggleShow }) => {
   //Use States for Modal
   // const [show, setShow] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -92,7 +92,7 @@ const CreateThesis = ({show, toggleShow}) => {
 
   const handleClose = () => {
     show = false;
-  }
+  };
 
   //For reset form
   const resetForm = () => {
@@ -126,7 +126,7 @@ const CreateThesis = ({show, toggleShow}) => {
       adviser: adviser,
       chairperson: chairperson,
       dean: dean,
-      abstract: abstract
+      abstract: abstract,
     };
 
     Axios.request({
@@ -170,8 +170,8 @@ const CreateThesis = ({show, toggleShow}) => {
       setYearLevelData(response.data);
     });
 
-     //Source: https://stackoverflow.com/a/65007703/13848366
-     return () => {
+    //Source: https://stackoverflow.com/a/65007703/13848366
+    return () => {
       setSectionData({}); // This not worked for me (Check mo na lng boss)
       setYearLevelData({});
     };
@@ -182,7 +182,7 @@ const CreateThesis = ({show, toggleShow}) => {
       <div>
         <ToastContainer
           position="top-center"
-          autoClose={5000}
+          autoClose={3001}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

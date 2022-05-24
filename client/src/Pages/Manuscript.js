@@ -28,19 +28,20 @@ import UpdateThesis from "../Modals/UpdateThesis";
 import DeleteThesis from "../Modals/DeleteThesis";
 import { timeIn } from "./Login";
 import Cookies from "universal-cookie";
+import CreateUser from "../Modals/CreateUser";
 
 var dayjs = require("dayjs");
 
 const Manuscript = () => {
   let navigate = useNavigate();
   //Modal States
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showAudits, setShowAudits] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   //User States
   Axios.defaults.withCredentials = true;
   const [username, setUsername] = useState("");
@@ -61,7 +62,7 @@ const Manuscript = () => {
 
   const [title, setTitle] = useState("");
 
-  const toggleShow = () => setShow(p => !p);
+  const toggleShow = () => setShow((p) => !p);
 
   const columns = [
     { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
@@ -186,7 +187,7 @@ const Manuscript = () => {
       // console.log(response);
       setThesisData(response.data);
     });
-  }, [thesisData]);
+  }, []);
 
   //Open View Info Modal
   const openViewInfo = (
@@ -225,7 +226,7 @@ const Manuscript = () => {
       chairperson,
       dean,
       abstract,
-      year
+      year,
     };
     setSingleThesis(data);
     setShowEditModal(true);
@@ -236,7 +237,9 @@ const Manuscript = () => {
     setTitle(title);
     setShowDeleteModal(true);
   };
-
+  const openCreateUserModal = () => {
+    setShowCreateUserModal(true);
+  };
   return (
     <>
       {isAuthenticated ? (
@@ -286,13 +289,19 @@ const Manuscript = () => {
             </Row>
             <Row>
               <Col className="d-flex justify-content-end align-items-center py-4">
+                <Button
+                  onClick={() => {
+                    openCreateUserModal();
+                  }}
+                  className="mx-4"
+                >
+                  Create a User
+                </Button>
+                {showCreateUserModal && <CreateUser />}
+
                 {role === "Encoder" || role === "Dean" ? (
-                  <Button
-                    className="mx-4"
-                    onClick={toggleShow}
-                  >
+                  <Button className="mx-4" onClick={toggleShow}>
                     Add Thesis
-                    
                   </Button>
                 ) : (
                   ""
@@ -380,7 +389,7 @@ const Manuscript = () => {
           {showDeleteModal && (
             <DeleteThesis thesisTitle={title} thesisId={thesisId} />
           )}
-          {show && (<CreateThesis show={show} toggleShow={toggleShow}/>)}
+          {show && <CreateThesis show={show} toggleShow={toggleShow} />}
         </>
       ) : (
         <NotAuthenticated />

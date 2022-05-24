@@ -64,11 +64,13 @@ app.post("/register", (req, res) => {
       "INSERT INTO tbl_users (username, password,role,secret_id) VALUES (?,?,?,?)",
       [username, hash, role, secret_id],
       (err, result) => {
-        if (result) {
-          console.log(result);
-          res.send({ message: "Registration successful!" });
+        if (err) {
+          console.log(err);
+          res.send({ message: "User exists." });
         } else {
-          res.send({ message: "Username exists." });
+          console.log(result);
+          console.log("ADDED");
+          res.send({ message: "User is added" });
         }
       }
     );

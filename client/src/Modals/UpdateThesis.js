@@ -230,7 +230,7 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
       <div>
         <ToastContainer
           position="top-center"
-          autoClose={5000}
+          autoClose={3001}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

@@ -11,7 +11,7 @@ const ImportPDF = () => {
     window.print();
   };
   useEffect(() => {
-    setTimeout(openWindow, 5000);
+    setTimeout(openWindow, 3001);
 
     const print = () => {
       const beforePrinting = () => {
