@@ -289,13 +289,17 @@ const Manuscript = () => {
             </Row>
             <Row>
               <Col className="d-flex justify-content-end align-items-center py-4">
-                <Button
-                  onClick={() => {
-                    openCreateUserModal();
-                  }}
-                >
-                  Create a User
-                </Button>
+                {role === "Dean" ? (
+                  <Button
+                    onClick={() => {
+                      openCreateUserModal();
+                    }}
+                  >
+                    Create a User
+                  </Button>
+                ) : (
+                  ""
+                )}
                 {showCreateUserModal && <CreateUser />}
 
                 {role === "Encoder" || role === "Dean" ? (

@@ -19,18 +19,32 @@ const CreateUser = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Dean");
   const [message, setMessage] = useState("");
+  const [validated, setValidated] = useState(false);
 
   const handleClose = () => {
     setShow(false);
+    window.location.reload();
   };
+  const resetForm = () => {
+    document.getElementById("addUser").reset();
+  };
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
 
-  const onFormSubmit = () => {
     const secret_id = randomString({
       length: 15,
       numeric: true,
       letters: true,
       special: true,
     });
+
+    if (form.checkValidity() === false) {
+      console.log("Inputs invalid");
+      setValidated(true);
+      return;
+    }
+
     Axios.post("http://localhost:3001/register", {
       username: username,
       password: password,
@@ -40,20 +54,24 @@ const CreateUser = () => {
       console.log(JSON.stringify(response));
       setMessage(response.data.message);
     });
+    resetForm();
+    setValidated(false);
+    window.location.reload();
   };
   return ReactDom.createPortal(
     <>
-      <Modal
-        show={show}
-        backdrop="static"
-        keyboard={false}
-        onHide={handleClose}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Create a User</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
+      {" "}
+      <Form validated={validated} id="addUser">
+        <Modal
+          show={show}
+          backdrop="static"
+          keyboard={false}
+          onHide={handleClose}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Create a User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Form.Group controlId="formBasicEmail" className="mb-3">
               <Form.Label>Username</Form.Label>
               <Form.Control
@@ -88,17 +106,23 @@ const CreateUser = () => {
             <Form.Group className="my-4">
               <Form.Text>{message}</Form.Text>
             </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" type="submit" onClick={onFormSubmit}>
-            Register
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              type="Submit"
+              onClick={() => {
+                onFormSubmit();
+              }}
+            >
+              Register
+            </Button>
+          </Modal.Footer>
+        </Modal>{" "}
+      </Form>
     </>,
     document.getElementById("modal-root")
   );
