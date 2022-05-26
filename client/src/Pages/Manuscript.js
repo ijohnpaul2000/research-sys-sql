@@ -29,6 +29,7 @@ import DeleteThesis from "../Modals/DeleteThesis";
 import { timeIn } from "./Login";
 import Cookies from "universal-cookie";
 import CreateUser from "../Modals/CreateUser";
+import ListUser from "../Modals/ListUser";
 
 var dayjs = require("dayjs");
 
@@ -42,6 +43,7 @@ const Manuscript = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [showListUserModal, setShowListUserModal] = useState(false);
   //User States
   Axios.defaults.withCredentials = true;
   const [username, setUsername] = useState("");
@@ -240,6 +242,9 @@ const Manuscript = () => {
   const openCreateUserModal = () => {
     setShowCreateUserModal(true);
   };
+  const openListUserModal = () => {
+    setShowListUserModal(true);
+  };
   return (
     <>
       {isAuthenticated ? (
@@ -289,6 +294,19 @@ const Manuscript = () => {
             </Row>
             <Row>
               <Col className="d-flex justify-content-end align-items-center py-4">
+                {role === "Dean" ? (
+                  <Button
+                    className="mx-4"
+                    onClick={() => {
+                      openListUserModal();
+                    }}
+                  >
+                    User Lists
+                  </Button>
+                ) : (
+                  ""
+                )}
+                {showListUserModal && <ListUser />}
                 {role === "Dean" ? (
                   <Button
                     onClick={() => {

@@ -13,10 +13,13 @@ import {
 } from "react-bootstrap";
 import logo from "../assets/guest_credentials.png";
 import Axios from "axios";
+import DeleteModal from "./DeleteModal";
 var dayjs = require("dayjs");
 const Audit = ({ permittedBy }) => {
   const [show, setShow] = useState(true);
   const [data, setData] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [hasItems, setHasItems] = useState(false);
   const handleClose = () => {
     setShow(false);
     window.location.reload();
@@ -31,13 +34,16 @@ const Audit = ({ permittedBy }) => {
     Axios.post("http://localhost:3001/viewAudits").then((response) => {
       console.log(JSON.stringify(response));
       setData(response.data);
-    });
 
-    //* Uncomment this function if you wanted to delete the audits after a (1) week.
-    // Axios.post("http://localhost:3001/deleteAudits").then((response) => {
-    //   console.log(JSON.stringify(response));
-    // })
+      console.log(hasItems);
+    });
   }, []);
+  useEffect(() => {
+    if (data.length > 0) {
+      setHasItems(true);
+    }
+  }, [data]);
+
   return ReactDom.createPortal(
     <div>
       <Container fluid>
@@ -50,14 +56,31 @@ const Audit = ({ permittedBy }) => {
           onHide={handleClose}
         >
           <Modal.Header closeButton></Modal.Header>
-          <div style={{ height: "70vh", width: "100%" }}>
-            <DataGrid
-              rows={data}
-              columns={columns}
-              pageSize={10}
-              rowsPerPageOptions={[10]}
-            />
-          </div>
+          <Modal.Body>
+            <div style={{ height: "70vh", width: "100%" }}>
+              <DataGrid
+                rows={data}
+                columns={columns}
+                pageSize={10}
+                rowsPerPageOptions={[10]}
+              />
+            </div>
+          </Modal.Body>
+
+          {hasItems && (
+            <Modal.Footer>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  setIsDeleting(true);
+                }}
+              >
+                Delete
+              </Button>
+            </Modal.Footer>
+          )}
+
+          {isDeleting && <DeleteModal />}
         </Modal>
       </Container>
     </div>,

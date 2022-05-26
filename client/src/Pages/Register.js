@@ -6,7 +6,7 @@ var randomString = require("random-string");
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Chairperson");
+  const [role, setRole] = useState("Dean");
   const [message, setMessage] = useState("");
   console.log(role);
 

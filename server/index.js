@@ -77,6 +77,45 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.delete("/deleteUser/:id", (req, res) => {
+  const id = req.params.id;
+
+  var sql = "DELETE FROM tbl_users WHERE id = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Value Deleted");
+    }
+  });
+});
+
+app.get("/listUser", (req, res) => {
+  db.query("select * from tbl_users", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
+app.delete("/deleteUser/:id", (req, res) => {
+  const id = req.params.id;
+
+  var sql = "DELETE FROM tbl_users WHERE thesis_id = ?";
+
+  db.query(sql, id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send("Value Deleted");
+    }
+  });
+});
+
 app.post("/forgot", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -266,15 +305,27 @@ app.post("/addAudit", (req, res) => {
   );
 });
 
-app.post("/deleteAudits", (req, res) => {
-  const deletedAt = req.body.deletedAt;
-  db.query("DELETE FROM tbl_audits where deletedAt < NOW()", (err, result) => {
-    if (result) {
-      console.log(result);
-      console.log(deletedAt);
-    } else {
+// app.delete("/deleteAudits", (req, res) => {
+//   const deletedAt = req.body.deletedAt;
+//   db.query("DELETE FROM tbl_audits", (err, result) => {
+//     if (result) {
+//       console.log(result);
+//       console.log(deletedAt);
+//     } else {
+//       console.log(err);
+//       console.log(deletedAt);
+//     }
+//   });
+// });
+
+app.delete("/deleteAudits", (req, res) => {
+  var sql = "DELETE FROM tbl_audits";
+
+  db.query(sql, (err, result) => {
+    if (err) {
       console.log(err);
-      console.log(deletedAt);
+    } else {
+      res.send("Deleted.");
     }
   });
 });
