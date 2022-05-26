@@ -13,18 +13,13 @@ import {
 import Axios from "axios";
 var randomString = require("random-string");
 
-const CreateUser = () => {
-  const [show, setShow] = useState(true);
+const CreateUser = ({show, toggleShow}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Dean");
   const [message, setMessage] = useState("");
   const [validated, setValidated] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    window.location.reload();
-  };
   const resetForm = () => {
     document.getElementById("addUser").reset();
   };
@@ -47,7 +42,6 @@ const CreateUser = () => {
     });
     resetForm();
     setValidated(false);
-    window.location.reload();
   };
   return ReactDom.createPortal(
     <>
@@ -57,7 +51,7 @@ const CreateUser = () => {
           show={show}
           backdrop="static"
           keyboard={false}
-          onHide={handleClose}
+          onHide={toggleShow}
         >
           <Modal.Header closeButton>
             <Modal.Title>Create a User</Modal.Title>
@@ -99,7 +93,7 @@ const CreateUser = () => {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={toggleShow}>
               Close
             </Button>
             <Button

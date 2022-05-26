@@ -15,10 +15,10 @@ import Axios from "axios";
 import ImportPDF from "../Components/ImportPDF";
 import "../sass/modals/_updatethesis.scss";
 
-const UpdateThesis = ({ thesisId, singleThesis, role }) => {
+const UpdateThesis = ({ thesisId, singleThesis, role, show, toggleShow, refreshToggle}) => {
   const navigate = useNavigate();
   //Use States for Modal
-  const [show, setShow] = useState(true);
+  // const [show, setShow] = useState(true);
   const [validated, setValidated] = useState(false);
 
   //Use States for Thesis Content
@@ -65,7 +65,6 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      onClose: () => handleClose(),
     });
 
   const notifyError = () =>
@@ -79,14 +78,18 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
       progress: undefined,
     });
 
-  const handleClose = () => {
-    setShow(!show);
-    window.location.reload();
-  };
+  // const handleClose = () => {
+  //   setShow(!show);
+  // };
 
   //For reset form
   const resetForm = () => {
     document.getElementById("updateFormId").reset();
+  };
+
+  //Refresh table from Parent Component
+  const refreshTableToggle = () => {
+    refreshToggle(toggleShow);
   };
 
   //Update Data to MYSQL
@@ -223,6 +226,7 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
     }
 
     updateThesisData();
+    refreshTableToggle();
   };
 
   return ReactDom.createPortal(
@@ -244,7 +248,7 @@ const UpdateThesis = ({ thesisId, singleThesis, role }) => {
         backdrop="static"
         show={show}
         keyboard={false}
-        onHide={handleClose}
+        onHide={toggleShow}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered

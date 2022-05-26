@@ -15,14 +15,11 @@ import Axios from "axios";
 import axios from "axios";
 import { IconContext } from "react-icons";
 import { BsTrash } from "react-icons/bs";
-const ListUser = () => {
-  const [show, setShow] = useState(true);
+const ListUser = ({show, toggleShow}) => {
   const [data, setData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const handleClose = () => {
-    setShow(false);
-    window.location.reload();
-  };
+  
+
   const columns = [
     { field: "username", headerName: "Username", width: 200, flex: 2 },
     { field: "role", headerName: "Role", width: 200, flex: 2 },
@@ -79,7 +76,7 @@ const ListUser = () => {
         backdrop="static"
         keyboard={false}
         size="lg"
-        onHide={handleClose}
+        onHide={toggleShow}
       >
         <Modal.Header closeButton>
           <Modal.Title>User List</Modal.Title>
@@ -95,7 +92,7 @@ const ListUser = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={openDeleteUserModal}>
+          <Button variant="secondary" onClick={toggleShow}>
             Close
           </Button>
         </Modal.Footer>

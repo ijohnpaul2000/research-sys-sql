@@ -4,24 +4,23 @@ import { Modal, Button } from "react-bootstrap";
 import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const DeleteThesis = ({ thesisTitle, thesisId }) => {
-  const [show, setShow] = useState(true);
-
-  //Magic Rerenderer AHAHAHAAA
-  const handleClose = () => {
-    setShow(!show);
-    window.location.reload();
-  };
+const DeleteThesis = ({ thesisTitle, thesisId, show, toggleShow, refreshToggle }) => {
 
   //Deletion
   const handleDelete = () => {
     Axios.delete(`http://localhost:3001/deleteThesis/${thesisId}`)
       .then(() => {
-        handleClose();
+        toggleShow();
+        refreshTableToggle();
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  //Refresh table from Parent Component
+  const refreshTableToggle = () => {
+    refreshToggle(toggleShow);
   };
 
   return (
@@ -29,7 +28,7 @@ const DeleteThesis = ({ thesisTitle, thesisId }) => {
       show={show}
       keyboard={false}
       backdrop="static"
-      onHide={handleClose}
+      onHide={toggleShow}
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -45,7 +44,7 @@ const DeleteThesis = ({ thesisTitle, thesisId }) => {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={toggleShow}>Close</Button>
         <Button variant="danger" onClick={handleDelete}>
           Delete
         </Button>

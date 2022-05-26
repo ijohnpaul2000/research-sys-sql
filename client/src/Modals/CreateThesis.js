@@ -17,7 +17,7 @@ import "../sass/modals/_createthesis.scss";
 import YearSection from "./YearSection";
 import axios from "axios";
 
-const CreateThesis = ({ show, toggleShow }) => {
+const CreateThesis = ({ show, toggleShow, refreshToggle }) => {
   //Use States for Modal
   // const [show, setShow] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -90,9 +90,10 @@ const CreateThesis = ({ show, toggleShow }) => {
   //   //window.location.reload();
   // };
 
-  const handleClose = () => {
-    show = false;
-  };
+  //Refresh table from Parent Component
+  const refreshTableToggle = () => {
+    refreshToggle(toggleShow);
+  }
 
   //For reset form
   const resetForm = () => {
@@ -156,6 +157,7 @@ const CreateThesis = ({ show, toggleShow }) => {
     addThesisData();
     resetForm();
     setValidated(false);
+    refreshTableToggle();
   };
 
   //Retrieving Year Level/Sections

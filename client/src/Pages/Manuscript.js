@@ -37,7 +37,6 @@ var dayjs = require("dayjs");
 const Manuscript = () => {
   let navigate = useNavigate();
   //Modal States
-  const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showAudits, setShowAudits] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -64,8 +63,16 @@ const Manuscript = () => {
   const [singleThesis, setSingleThesis] = useState([]);
 
   const [title, setTitle] = useState("");
+  const [refreshData, setRefreshData] = useState(false);
 
-  const toggleShow = () => setShow((p) => !p);
+  //Toggle States
+  const toggleShow = () => setShowAddModal((p) => !p);
+  const toggleUpdateShow = () => setShowEditModal((p) => !p);
+  const toggleDeleteShow = () => setShowDeleteModal((p) => !p);
+  const toggleCreateUserShow = () => setShowCreateUserModal((p) => !p);
+  const toggleListUserShow = () => setShowListUserModal((p) => !p);
+
+  const refreshToggle = () => setRefreshData(!refreshData);
 
   const columns = [
     { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
@@ -190,7 +197,7 @@ const Manuscript = () => {
       // console.log(response);
       setThesisData(response.data);
     });
-  }, []);
+  }, [refreshData]);
 
   //Open View Info Modal
   const openViewInfo = (
@@ -232,19 +239,19 @@ const Manuscript = () => {
       year,
     };
     setSingleThesis(data);
-    setShowEditModal(true);
+    toggleUpdateShow();
   };
 
   const openDeleteModal = (id, title) => {
     setThesisId(id);
     setTitle(title);
-    setShowDeleteModal(true);
+    toggleDeleteShow();
   };
   const openCreateUserModal = () => {
-    setShowCreateUserModal(true);
+    toggleCreateUserShow();
   };
   const openListUserModal = () => {
-    setShowListUserModal(true);
+    toggleListUserShow();
   };
   return (
     <>
@@ -310,7 +317,12 @@ const Manuscript = () => {
                 ) : (
                   ""
                 )}
-                {showListUserModal && <ListUser />}
+                {showListUserModal && (
+                  <ListUser
+                    show={showListUserModal}
+                    toggleShow={toggleListUserShow}
+                  />
+                )}
                 {role === "Dean" ? (
                   <Button
                     className="mx-1"
@@ -323,7 +335,12 @@ const Manuscript = () => {
                 ) : (
                   ""
                 )}
-                {showCreateUserModal && <CreateUser />}
+                {showCreateUserModal && (
+                  <CreateUser
+                    show={showCreateUserModal}
+                    toggleShow={toggleCreateUserShow}
+                  />
+                )}
                 {role === "Encoder" || role === "Dean" ? (
                   <Button className="mx-1" onClick={toggleShow}>
                     Add Thesis
@@ -411,12 +428,27 @@ const Manuscript = () => {
               singleThesis={singleThesis}
               thesisId={thesisId}
               role={role}
+              show={showEditModal}
+              toggleShow={toggleUpdateShow}
+              refreshToggle={refreshToggle}
             />
           )}
           {showDeleteModal && (
-            <DeleteThesis thesisTitle={title} thesisId={thesisId} />
+            <DeleteThesis
+              thesisTitle={title}
+              thesisId={thesisId}
+              show={showDeleteModal}
+              toggleShow={toggleDeleteShow}
+              refreshToggle={refreshToggle}
+            />
           )}
-          {show && <CreateThesis show={show} toggleShow={toggleShow} />}
+          {showAddModal && (
+            <CreateThesis
+              show={showAddModal}
+              toggleShow={toggleShow}
+              refreshToggle={refreshToggle}
+            />
+          )}
         </>
       ) : (
         <NotAuthenticated />
