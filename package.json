@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "export-to-csv": "^0.2.1",
     "random-string": "^0.2.0"
   }
 }

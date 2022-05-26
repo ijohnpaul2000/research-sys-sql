@@ -139,7 +139,7 @@ app.post("/forgot", (req, res) => {
     }
 
     db.query(query, [hash, username, secret_id], (err, result) => {
-      if (result.message === "(Rows matched: 0  Changed: 0  Warnings: 0") {
+      if (result.affectedRows === 0) {
         res.send({ message: "No Users Found!" });
       } else {
         res.send({ message: "Password changed successfully!" });

@@ -80,7 +80,7 @@ const Audit = ({ permittedBy }) => {
             </Modal.Footer>
           )}
 
-          {isDeleting && <DeleteModal />}
+          {isDeleting && <DeleteModal data={data} />}
         </Modal>
       </Container>
     </div>,
