@@ -7,6 +7,7 @@ import {
   Dropdown,
   DropdownButton,
   ButtonGroup,
+  Alert,
 } from "react-bootstrap";
 import {
   BsFillPencilFill,
@@ -293,10 +294,13 @@ const Manuscript = () => {
               <Col className="manuscript-text mb-4">Manuscript List</Col>
             </Row>
             <Row>
-              <Col className="d-flex justify-content-end align-items-center py-4">
+              <Col
+                md={12}
+                className="d-flex justify-content-end align-items-center py-4"
+              >
                 {role === "Dean" ? (
                   <Button
-                    className="mx-4"
+                    className="mx-1"
                     onClick={() => {
                       openListUserModal();
                     }}
@@ -309,6 +313,7 @@ const Manuscript = () => {
                 {showListUserModal && <ListUser />}
                 {role === "Dean" ? (
                   <Button
+                    className="mx-1"
                     onClick={() => {
                       openCreateUserModal();
                     }}
@@ -319,41 +324,42 @@ const Manuscript = () => {
                   ""
                 )}
                 {showCreateUserModal && <CreateUser />}
-
                 {role === "Encoder" || role === "Dean" ? (
-                  <Button className="mx-4" onClick={toggleShow}>
+                  <Button className="mx-1" onClick={toggleShow}>
                     Add Thesis
                   </Button>
                 ) : (
                   ""
                 )}
-
-                <DropdownButton id="dropdown-basic-button" title="Settings">
-                  <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
-
-                  {role === "Dean" || role === "Chairperson" ? (
-                    <>
-                      <Dropdown.Item
-                        onClick={() => {
-                          setShowModal(true);
-                        }}
-                      >
-                        Create Guest Credentials
-                        {showModal ? <CreateGuest createRole={username} /> : ""}
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        onClick={() => {
-                          setShowAudits(true);
-                        }}
-                      >
-                        System History
-                        {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
-                      </Dropdown.Item>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </DropdownButton>
+              </Col>
+              <Col className="d-flex justify-content-end align-items-center ">
+                {role === "Dean" || role === "Chairperson" ? (
+                  <>
+                    <Button
+                      className="mx-1"
+                      onClick={() => {
+                        setShowModal(true);
+                      }}
+                    >
+                      Create Guest Credentials
+                      {showModal ? <CreateGuest createRole={username} /> : ""}
+                    </Button>
+                    <Button
+                      className="mx-1"
+                      onClick={() => {
+                        setShowAudits(true);
+                      }}
+                    >
+                      System History
+                      {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
+                    </Button>
+                  </>
+                ) : (
+                  ""
+                )}{" "}
+                <Button className="mx-1" onClick={logoutUser}>
+                  Logout
+                </Button>
               </Col>
             </Row>
           </Container>

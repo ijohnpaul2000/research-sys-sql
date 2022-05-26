@@ -70,15 +70,21 @@ const CreateGuest = ({ createRole }) => {
 
         if (response.data.message) {
           setErrorMessage(response.data.message);
+          setTimeout(clearSuccessMessage, 2000);
         }
       });
-    } else if (guestUsername.length < 10 && guestPassword.length < 10) {
-      setErrorMessage("Enter more than 10 characters.");
+    } else if (guestUsername.length <= 10) {
+      setErrorMessage(
+        "Please make a strong Username. (more than 10 characters)"
+      );
+      setTimeout(clearErrorMessage, 2000);
+    } else if (guestUsername.length >= 10 && guestPassword.length <= 10) {
+      setErrorMessage(
+        "Please make a strong Password. (more than 10 characters)"
+      );
       setTimeout(clearErrorMessage, 2000);
     } else {
-      setErrorMessage(
-        "Error found, please try again with different credentials."
-      );
+      setErrorMessage("Please try again.");
       setTimeout(clearErrorMessage, 2000);
     }
   };

@@ -28,22 +28,13 @@ const CreateUser = () => {
   const resetForm = () => {
     document.getElementById("addUser").reset();
   };
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-
+  const onFormSubmit = () => {
     const secret_id = randomString({
       length: 15,
       numeric: true,
       letters: true,
       special: true,
     });
-
-    if (form.checkValidity() === false) {
-      console.log("Inputs invalid");
-      setValidated(true);
-      return;
-    }
 
     Axios.post("http://localhost:3001/register", {
       username: username,
@@ -61,7 +52,7 @@ const CreateUser = () => {
   return ReactDom.createPortal(
     <>
       {" "}
-      <Form validated={validated} id="addUser">
+      <Form validated={validated} id="addUser" onSubmit={onFormSubmit}>
         <Modal
           show={show}
           backdrop="static"

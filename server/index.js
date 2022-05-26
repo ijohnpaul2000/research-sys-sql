@@ -266,7 +266,6 @@ app.post("/viewAudits", (req, res) => {
   const accessedBy = req.query.accessedBy;
   const timeIn = req.query.timeIn;
   const timeOut = req.query.timeOut;
-  const deletedAt = req.query.deletedAt;
 
   db.query("SELECT * FROM tbl_audits ", (err, result) => {
     if (err) {
@@ -286,11 +285,10 @@ app.post("/addAudit", (req, res) => {
   const accessedBy = req.body.accessedBy;
   const timeIn = req.body.timeIn;
   const timeOut = req.body.timeOut;
-  const deletedAt = req.body.deletedAt;
   const permittedBy = req.body.permittedBy;
   db.query(
-    "INSERT INTO tbl_audits (accessedBy, timeIn, timeOut, deletedAt, permittedBy) VALUES (?,?,?,?,?)",
-    [accessedBy, timeIn, timeOut, deletedAt, permittedBy],
+    "INSERT INTO tbl_audits (accessedBy, timeIn, timeOut, permittedBy) VALUES (?,?,?,?)",
+    [accessedBy, timeIn, timeOut, permittedBy],
     (err, result) => {
       if (result) {
         res.send(result);
