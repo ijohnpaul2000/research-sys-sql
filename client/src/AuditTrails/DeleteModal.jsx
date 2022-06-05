@@ -16,6 +16,7 @@ const DeleteModal = (props) => {
     Axios.delete(`http://localhost:3001/deleteAudits`)
       .then(() => {
         csvExporter.generateCsv(data);
+        props.notifySuccess();
         handleClose();
       })
       .catch((error) => {

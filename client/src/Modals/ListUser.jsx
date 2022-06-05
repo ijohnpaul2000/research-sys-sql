@@ -15,7 +15,7 @@ import Axios from "axios";
 import axios from "axios";
 import { IconContext } from "react-icons";
 import { BsTrash } from "react-icons/bs";
-const ListUser = ({show, toggleShow}) => {
+const ListUser = ({show, toggleShow, notifySuccess}) => {
   const [data, setData] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   
@@ -39,6 +39,7 @@ const ListUser = ({show, toggleShow}) => {
               axios
                 .delete(`http://localhost:3001/deleteUser/${cellValues.row.id}`)
                 .then(() => {
+                  notifySuccess();
                   window.location.reload();
                 })
                 .catch((error) => {

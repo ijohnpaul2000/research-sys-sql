@@ -31,6 +31,8 @@ import { timeIn } from "./Login";
 import Cookies from "universal-cookie";
 import CreateUser from "../Modals/CreateUser";
 import ListUser from "../Modals/ListUser";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 var dayjs = require("dayjs");
 
@@ -73,6 +75,18 @@ const Manuscript = () => {
   const toggleListUserShow = () => setShowListUserModal((p) => !p);
 
   const refreshToggle = () => setRefreshData(!refreshData);
+
+    //Toast Controller
+    const notifySuccessDelete = () =>
+      toast.success("Data was deleted.", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
 
   const columns = [
     { field: "thesis_id", headerName: "ID", width: 20, flex: 1 },
@@ -161,9 +175,6 @@ const Manuscript = () => {
       accessedBy: username,
       timeIn: cookies.get("timeIn"),
       timeOut: dayjs().format("YYYY-MM-DD hh:mm:ss"),
-      deletedAt: dayjs(cookies.get("timeIn"))
-        .add(1, "w")
-        .format("YYYY-MM-DD HH:mm:ss"),
       permittedBy: permittedBy,
     }).then((response) => {
       console.log(
@@ -257,6 +268,19 @@ const Manuscript = () => {
     <>
       {isAuthenticated ? (
         <>
+          <div>
+            <ToastContainer
+              position="top-center"
+              autoClose={3001}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </div>
           <Stack direction="row" spacing={1} className="m-2">
             <Row>
               <Col lg={12} className="m--2">
@@ -321,6 +345,7 @@ const Manuscript = () => {
                   <ListUser
                     show={showListUserModal}
                     toggleShow={toggleListUserShow}
+                    notifySuccess={notifySuccessDelete}
                   />
                 )}
                 {role === "Dean" ? (
@@ -368,7 +393,7 @@ const Manuscript = () => {
                       }}
                     >
                       System History
-                      {showAudits ? <Audit permittedBy={permittedBy} /> : ""}
+                      {showAudits ? <Audit permittedBy={permittedBy} notifySuccess={notifySuccessDelete}/> : ""}
                     </Button>
                   </>
                 ) : (
@@ -440,6 +465,7 @@ const Manuscript = () => {
               show={showDeleteModal}
               toggleShow={toggleDeleteShow}
               refreshToggle={refreshToggle}
+              notifySuccess={notifySuccessDelete}
             />
           )}
           {showAddModal && (

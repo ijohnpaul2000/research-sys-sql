@@ -15,7 +15,7 @@ import logo from "../assets/guest_credentials.png";
 import Axios from "axios";
 import DeleteModal from "./DeleteModal";
 var dayjs = require("dayjs");
-const Audit = ({ permittedBy }) => {
+const Audit = ({ permittedBy, notifySuccess }) => {
   const [show, setShow] = useState(true);
   const [data, setData] = useState([]);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,6 +30,11 @@ const Audit = ({ permittedBy }) => {
     { field: "timeOut", headerName: "Time Out", width: 200, flex: 2 },
     { field: "permittedBy", headerName: "Permitted By", width: 200, flex: 2 },
   ];
+
+  const notifySuccessDelete = () => {
+    notifySuccess();
+  }
+  
   useEffect(() => {
     Axios.post("http://localhost:3001/viewAudits").then((response) => {
       console.log(JSON.stringify(response));
@@ -80,7 +85,7 @@ const Audit = ({ permittedBy }) => {
             </Modal.Footer>
           )}
 
-          {isDeleting && <DeleteModal data={data} />}
+          {isDeleting && <DeleteModal data={data} notifySuccess={notifySuccessDelete} />}
         </Modal>
       </Container>
     </div>,
